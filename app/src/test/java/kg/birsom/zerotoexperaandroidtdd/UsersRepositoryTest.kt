@@ -39,33 +39,76 @@ class UsersRepositoryTest {
                 userEntity(id = 1, name = "Leanne Graham"),
                 userEntity(id = 2, name = "Ervin Howell")
             ),
-            dao.insertedUsers
+            dao.users
         )
     }
 
-    private class FakeUserApi(
-        private val users: List<UserResponse>
-    ) : UserApi {
+    @Test
+    fun returns_cached_users_when_api_fails_and_cache_exists() = runBlocking {
+        val api = FakeUserApi(
+            error = IllegalStateException("No internet")
+        )
+        val dao = FakeUserDao(
+            cachedUsers = mutableListOf(
+                userEntity(id = 1, name = "Cached Leanne"),
+                userEntity(id = 2, name = "Cached Ervin")
+            )
+        )
+        val repository: UsersRepository = UsersRepositoryImpl(
+            api = api,
+            dao = dao
+        )
 
-        override suspend fun getUsers(): List<UserResponse> = users
+        val users = repository.getUsers()
+
+        assertEquals(2, users.size)
+        assertEquals("Cached Leanne", users[0].name)
+        assertEquals("Cached Ervin", users[1].name)
     }
 
-    private class FakeUserDao : UserDao {
+    @Test
+    fun returns_cached_users_when_api_fails_and_empty_cache() = runBlocking {
+        val api = FakeUserApi(
+            error = IllegalStateException("No internet")
+        )
+        val dao = FakeUserDao()
+        val repository: UsersRepository = UsersRepositoryImpl(
+            api = api,
+            dao = dao
+        )
 
-        val insertedUsers = mutableListOf<UserEntity>()
+        val users = repository.getUsers()
 
-        override suspend fun getUsers(): List<UserEntity> = insertedUsers
+        assertEquals(0, users.size)
+    }
+
+    private class FakeUserApi(
+        private val users: List<UserResponse> = emptyList(),
+        private val error: Exception? = null
+    ) : UserApi {
+
+        override suspend fun getUsers(): List<UserResponse> {
+            error?.let { throw it }
+            return users
+        }
+    }
+
+    private class FakeUserDao(
+        cachedUsers: MutableList<UserEntity> = mutableListOf()
+    ) : UserDao {
+        val users = cachedUsers.toMutableList()
+
+        override suspend fun getUsers(): List<UserEntity> = users
 
         override suspend fun insertUsers(users: List<UserEntity>) {
-            insertedUsers.clear()
-            insertedUsers.addAll(users)
+            this.users.clear()
+            this.users.addAll(users)
         }
 
         override suspend fun getUserById(id: Int): UserEntity? {
-            return insertedUsers.firstOrNull { it.id == id }
+            return users.firstOrNull { it.id == id }
         }
     }
-
     private fun userResponse(
         id: Int,
         name: String

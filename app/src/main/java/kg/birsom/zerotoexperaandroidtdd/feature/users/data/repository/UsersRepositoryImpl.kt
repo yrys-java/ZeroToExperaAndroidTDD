@@ -13,8 +13,12 @@ class UsersRepositoryImpl(
 ) : UsersRepository {
 
     override suspend fun getUsers(): List<User> {
-        val response = api.getUsers().map { it.toDomain() }
-        dao.insertUsers(response.map { it.toEntity() })
-        return response
+        return try {
+            val users = api.getUsers().map { it.toDomain() }
+            dao.insertUsers(users.map { it.toEntity() })
+            users
+        } catch (_: Exception) {
+            dao.getUsers().map { it.toDomain() }
+        }
     }
 }
