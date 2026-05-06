@@ -4,6 +4,8 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.data.local.dao.UserDao
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.mapper.toDomain
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.mapper.toEntity
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.remote.api.UserApi
+import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UserError
+import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UserResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.repository.UsersRepository
@@ -26,6 +28,16 @@ class UsersRepositoryImpl(
             } else {
                 UsersResult.Error(UsersError.NoInternet)
             }
+        }
+    }
+
+    override suspend fun getUser(id: Int): UserResult {
+        val user = dao.getUserById(id)?.toDomain()
+
+        return if (user != null) {
+            UserResult.Success(user)
+        } else {
+            UserResult.Error(UserError.NotFound)
         }
     }
 }

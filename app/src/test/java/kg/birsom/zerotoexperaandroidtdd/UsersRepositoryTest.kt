@@ -8,6 +8,8 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.data.remote.model.CompanyR
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.remote.model.GeoResponse
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.remote.model.UserResponse
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.repository.UsersRepositoryImpl
+import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UserError
+import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UserResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.repository.UsersRepository
@@ -85,6 +87,42 @@ class UsersRepositoryTest {
 
         assertEquals(
             UsersResult.Error(UsersError.NoInternet),
+            result
+        )
+    }
+
+    @Test
+    fun returns_user_by_id_from_cache() = runBlocking {
+        val api = FakeUserApi()
+        val dao = FakeUserDao(
+            cachedUsers = listOf(
+                userEntity(id = 1, name = "Leanne Graham"),
+                userEntity(id = 2, name = "Ervin Howell")
+            )
+        )
+        val repository: UsersRepository = UsersRepositoryImpl(
+            api = api,
+            dao = dao
+        )
+
+        val result = repository.getUser(id = 2) as UserResult.Success
+
+        assertEquals("Ervin Howell", result.user.name)
+    }
+
+    @Test
+    fun returns_not_found_when_user_does_not_exist_in_cache() = runBlocking {
+        val api = FakeUserApi()
+        val dao = FakeUserDao()
+        val repository: UsersRepository = UsersRepositoryImpl(
+            api = api,
+            dao = dao
+        )
+
+        val result = repository.getUser(id = 404)
+
+        assertEquals(
+            UserResult.Error(UserError.NotFound),
             result
         )
     }
