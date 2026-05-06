@@ -118,4 +118,20 @@ class UsersScreenUiTest {
             initials = "E"
         )
     }
+
+    @Test
+    fun shows_loading_without_users_content() {
+        composeTestRule.setContent {
+            ZeroToExperaAndroidTDDTheme {
+                UsersScreen(
+                    uiState = UsersUiState.Loading,
+                    onRetryClick = {},
+                    onUserClick = {}
+                )
+            }
+        }
+
+        usersPage.assertLoading()
+        usersPage.assertUserDoesNotExist(position = 0)
+    }
 }

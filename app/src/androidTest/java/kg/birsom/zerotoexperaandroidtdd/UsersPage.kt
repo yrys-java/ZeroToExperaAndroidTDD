@@ -39,4 +39,19 @@ class UsersPage(
             useUnmergedTree = true
         ).assertTextEquals(initials)
     }
+
+    fun assertLoading() {
+        composeTestRule.onNodeWithTag(UsersScreenTags.BOX_USERS_LOADING)
+            .assertIsDisplayed()
+
+        composeTestRule.onNodeWithTag(
+            testTag = UsersScreenTags.PROGRESS_USERS_LOADING,
+            useUnmergedTree = true
+        ).assertIsDisplayed()
+    }
+
+    fun assertUserDoesNotExist(position: Int) {
+        composeTestRule.onNodeWithTag(UsersScreenTags.cardUserItem(position))
+            .assertDoesNotExist()
+    }
 }
