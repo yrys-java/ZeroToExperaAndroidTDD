@@ -117,7 +117,7 @@ private fun UserListItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .testTag("User item at $position"),
+            .testTag("card_users_item_$position"),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -135,7 +135,7 @@ private fun UserListItem(
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.testTag("User name at $position")
+                    modifier = Modifier.testTag("text_users_item_name_$position")
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
@@ -144,7 +144,7 @@ private fun UserListItem(
                     color = Color(0xFF667085),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.testTag("User email at $position")
+                    modifier = Modifier.testTag("text_users_item_email_$position")
                 )
             }
 

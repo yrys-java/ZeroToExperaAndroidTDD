@@ -14,13 +14,13 @@ class UsersPage(
         name: String,
         email: String
     ) {
-        composeTestRule.onNodeWithTag("User item at $position")
+        composeTestRule.onNodeWithTag("card_users_item_$position")
             .assertIsDisplayed()
 
-        composeTestRule.onNodeWithTag("User name at $position", useUnmergedTree = true)
+        composeTestRule.onNodeWithTag("text_users_item_name_$position", useUnmergedTree = true)
             .assertTextEquals(name)
 
-        composeTestRule.onNodeWithTag("User email at $position", useUnmergedTree = true)
+        composeTestRule.onNodeWithTag("text_users_item_email_$position", useUnmergedTree = true)
             .assertTextEquals(email)
     }
 }
