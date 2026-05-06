@@ -2,6 +2,7 @@ package kg.birsom.zerotoexperaandroidtdd
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import junit.framework.TestCase.assertEquals
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.UsersScreen
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UserUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UsersUiState
@@ -133,5 +134,32 @@ class UsersScreenUiTest {
 
         usersPage.assertLoading()
         usersPage.assertUserDoesNotExist(position = 0)
+    }
+
+    @Test
+    fun shows_error_with_retry_without_users_and_loading() {
+        var retryClickedCount = 0
+
+        composeTestRule.setContent {
+            ZeroToExperaAndroidTDDTheme {
+                UsersScreen(
+                    uiState = UsersUiState.Error(
+                        message = "No internet connection"
+                    ),
+                    onRetryClick = {
+                        retryClickedCount++
+                    },
+                    onUserClick = {}
+                )
+            }
+        }
+
+        usersPage.assertError(message = "No internet connection")
+        usersPage.assertUserDoesNotExist(position = 0)
+        usersPage.assertLoadingDoesNotExist()
+
+        usersPage.retry()
+
+        assertEquals(1, retryClickedCount)
     }
 }

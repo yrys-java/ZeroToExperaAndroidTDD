@@ -4,6 +4,9 @@ object UsersScreenTags {
 
     const val BOX_USERS_LOADING = "box_users_loading"
     const val PROGRESS_USERS_LOADING = "progress_users_loading"
+    const val CARD_USERS_ERROR = "card_users_error"
+    const val TEXT_USERS_ERROR_MESSAGE = "text_users_error_message"
+    const val BUTTON_USERS_RETRY = "button_users_retry"
 
     fun cardUserItem(position: Int) = "card_users_item_$position"
 
