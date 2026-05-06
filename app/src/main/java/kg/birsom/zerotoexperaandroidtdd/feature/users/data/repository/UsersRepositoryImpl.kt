@@ -4,7 +4,8 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.data.local.dao.UserDao
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.mapper.toDomain
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.mapper.toEntity
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.remote.api.UserApi
-import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.User
+import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersError
+import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.repository.UsersRepository
 
 class UsersRepositoryImpl(
@@ -12,13 +13,19 @@ class UsersRepositoryImpl(
     private val dao: UserDao
 ) : UsersRepository {
 
-    override suspend fun getUsers(): List<User> {
+    override suspend fun getUsers(): UsersResult {
         return try {
             val users = api.getUsers().map { it.toDomain() }
             dao.insertUsers(users.map { it.toEntity() })
-            users
+            UsersResult.Fresh(users)
         } catch (_: Exception) {
-            dao.getUsers().map { it.toDomain() }
+            val cachedUsers = dao.getUsers().map { it.toDomain() }
+
+            if (cachedUsers.isNotEmpty()) {
+                UsersResult.Cached(cachedUsers)
+            } else {
+                UsersResult.Error(UsersError.NoInternet)
+            }
         }
     }
 }

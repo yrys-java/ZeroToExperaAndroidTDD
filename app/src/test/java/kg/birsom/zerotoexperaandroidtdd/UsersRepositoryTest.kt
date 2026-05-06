@@ -8,6 +8,8 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.data.remote.model.CompanyR
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.remote.model.GeoResponse
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.remote.model.UserResponse
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.repository.UsersRepositoryImpl
+import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersError
+import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.repository.UsersRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -16,7 +18,7 @@ import org.junit.Test
 class UsersRepositoryTest {
 
     @Test
-    fun loads_users_from_api_saves_cache_and_returns_domain_users() = runBlocking {
+    fun loads_users_from_api_saves_cache_and_returns_fresh_users() = runBlocking {
         val api = FakeUserApi(
             users = listOf(
                 userResponse(id = 1, name = "Leanne Graham"),
@@ -29,7 +31,8 @@ class UsersRepositoryTest {
             dao = dao
         )
 
-        val users = repository.getUsers()
+        val result = repository.getUsers() as UsersResult.Fresh
+        val users = result.users
 
         assertEquals(2, users.size)
         assertEquals("Leanne Graham", users[0].name)
@@ -49,7 +52,7 @@ class UsersRepositoryTest {
             error = IllegalStateException("No internet")
         )
         val dao = FakeUserDao(
-            cachedUsers = mutableListOf(
+            cachedUsers = listOf(
                 userEntity(id = 1, name = "Cached Leanne"),
                 userEntity(id = 2, name = "Cached Ervin")
             )
@@ -59,7 +62,8 @@ class UsersRepositoryTest {
             dao = dao
         )
 
-        val users = repository.getUsers()
+        val result = repository.getUsers() as UsersResult.Cached
+        val users = result.users
 
         assertEquals(2, users.size)
         assertEquals("Cached Leanne", users[0].name)
@@ -67,7 +71,7 @@ class UsersRepositoryTest {
     }
 
     @Test
-    fun returns_cached_users_when_api_fails_and_empty_cache() = runBlocking {
+    fun returns_error_when_api_fails_and_cache_is_empty() = runBlocking {
         val api = FakeUserApi(
             error = IllegalStateException("No internet")
         )
@@ -77,9 +81,12 @@ class UsersRepositoryTest {
             dao = dao
         )
 
-        val users = repository.getUsers()
+        val result = repository.getUsers()
 
-        assertEquals(0, users.size)
+        assertEquals(
+            UsersResult.Error(UsersError.NoInternet),
+            result
+        )
     }
 
     private class FakeUserApi(
@@ -94,11 +101,14 @@ class UsersRepositoryTest {
     }
 
     private class FakeUserDao(
-        cachedUsers: MutableList<UserEntity> = mutableListOf()
+        cachedUsers: List<UserEntity> = emptyList()
     ) : UserDao {
+
         val users = cachedUsers.toMutableList()
 
-        override suspend fun getUsers(): List<UserEntity> = users
+        override suspend fun getUsers(): List<UserEntity> {
+            return users
+        }
 
         override suspend fun insertUsers(users: List<UserEntity>) {
             this.users.clear()
@@ -109,6 +119,7 @@ class UsersRepositoryTest {
             return users.firstOrNull { it.id == id }
         }
     }
+
     private fun userResponse(
         id: Int,
         name: String

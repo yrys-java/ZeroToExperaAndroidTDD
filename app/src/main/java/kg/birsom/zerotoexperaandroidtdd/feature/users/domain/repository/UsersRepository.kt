@@ -1,8 +1,8 @@
 package kg.birsom.zerotoexperaandroidtdd.feature.users.domain.repository
 
-import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.User
+import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersResult
 
 interface UsersRepository {
 
-    suspend fun getUsers(): List<User>
+    suspend fun getUsers(): UsersResult
 }
