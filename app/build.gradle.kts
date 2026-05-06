@@ -60,4 +60,5 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
     androidTestImplementation(libs.androidx.room.testing)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 }
