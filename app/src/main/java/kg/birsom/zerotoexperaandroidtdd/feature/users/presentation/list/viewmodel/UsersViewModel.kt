@@ -1,5 +1,6 @@
 package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersResult
@@ -10,7 +11,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+private const val USERS_LOADED_KEY = "USERS_LOADED_KEY"
+
 class UsersViewModel(
+    private val savedStateHandle: SavedStateHandle,
     private val repository: UsersRepository
 ) : ViewModel() {
 
@@ -18,7 +22,24 @@ class UsersViewModel(
     val uiState: StateFlow<UsersUiState> = mutableUiState.asStateFlow()
 
     suspend fun loadUsers() {
-        mutableUiState.value = when (val result = repository.getUsers()) {
+        updateState(repository.getUsers())
+        savedStateHandle[USERS_LOADED_KEY] = true
+    }
+
+    suspend fun restoreUsers() {
+        val wasLoaded = savedStateHandle[USERS_LOADED_KEY] ?: false
+
+        if (wasLoaded) {
+            updateState(repository.getCachedUsers())
+        }
+    }
+
+    suspend fun retry() {
+        loadUsers()
+    }
+
+    private fun updateState(result: UsersResult) {
+        mutableUiState.value = when (result) {
             is UsersResult.Fresh -> UsersUiState.Content(
                 users = result.users.map { it.toUi() },
                 offline = false
@@ -33,10 +54,6 @@ class UsersViewModel(
                 message = result.error.message()
             )
         }
-    }
-
-    suspend fun retry() {
-        loadUsers()
     }
 
     private fun UsersError.message(): String {

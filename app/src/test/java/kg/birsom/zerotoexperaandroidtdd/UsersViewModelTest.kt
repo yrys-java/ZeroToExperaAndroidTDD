@@ -1,5 +1,6 @@
 package kg.birsom.zerotoexperaandroidtdd
 
+import androidx.lifecycle.SavedStateHandle
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.Address
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.Company
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.Geo
@@ -27,7 +28,10 @@ class UsersViewModelTest {
                 )
             )
         )
-        val viewModel = UsersViewModel(repository)
+        val viewModel = UsersViewModel(
+            savedStateHandle = SavedStateHandle(),
+            repository = repository
+        )
 
         viewModel.loadUsers()
 
@@ -52,7 +56,10 @@ class UsersViewModelTest {
                 )
             )
         )
-        val viewModel = UsersViewModel(repository)
+        val viewModel = UsersViewModel(
+            savedStateHandle = SavedStateHandle(),
+            repository = repository
+        )
 
         viewModel.loadUsers()
 
@@ -72,7 +79,11 @@ class UsersViewModelTest {
         val repository = FakeUsersRepository(
             usersResult = UsersResult.Error(UsersError.NoInternet)
         )
-        val viewModel = UsersViewModel(repository)
+
+        val viewModel = UsersViewModel(
+            savedStateHandle = SavedStateHandle(),
+            repository = repository
+        )
 
         viewModel.loadUsers()
 
@@ -94,7 +105,10 @@ class UsersViewModelTest {
                 )
             )
         )
-        val viewModel = UsersViewModel(repository)
+        val viewModel = UsersViewModel(
+            savedStateHandle = SavedStateHandle(),
+            repository = repository
+        )
 
         viewModel.loadUsers()
         assertEquals(
@@ -114,6 +128,83 @@ class UsersViewModelTest {
             viewModel.uiState.value
         )
         assertEquals(2, repository.getUsersCalledCount)
+    }
+
+    @Test
+    fun restores_users_from_cache_after_process_recreation() = runBlocking {
+        val savedStateHandle = SavedStateHandle()
+        val firstRepository = FakeUsersRepository(
+            usersResult = UsersResult.Fresh(
+                users = listOf(
+                    user(id = 1, name = "Leanne Graham")
+                )
+            )
+        )
+        var viewModel = UsersViewModel(
+            savedStateHandle = savedStateHandle,
+            repository = firstRepository
+        )
+
+        viewModel.loadUsers()
+
+        val secondRepository = FakeUsersRepository(
+            cachedUsersResult = UsersResult.Cached(
+                users = listOf(
+                    user(id = 1, name = "Cached Leanne")
+                )
+            )
+        )
+        viewModel = UsersViewModel(
+            savedStateHandle = savedStateHandle,
+            repository = secondRepository
+        )
+
+        viewModel.restoreUsers()
+
+        assertEquals(0, secondRepository.getUsersCalledCount)
+        assertEquals(1, secondRepository.getCachedUsersCalledCount)
+        assertEquals(
+            UsersUiState.Content(
+                users = listOf(
+                    UserUi(id = 1, name = "Cached Leanne", email = "user1@example.com")
+                ),
+                offline = true
+            ),
+            viewModel.uiState.value
+        )
+    }
+
+    @Test
+    fun shows_error_when_restored_cache_is_empty() = runBlocking {
+        val savedStateHandle = SavedStateHandle()
+        val firstRepository = FakeUsersRepository(
+            usersResult = UsersResult.Fresh(
+                users = listOf(
+                    user(id = 1, name = "Leanne Graham")
+                )
+            )
+        )
+        var viewModel = UsersViewModel(
+            savedStateHandle = savedStateHandle,
+            repository = firstRepository
+        )
+
+        viewModel.loadUsers()
+
+        val secondRepository = FakeUsersRepository(
+            cachedUsersResult = UsersResult.Error(UsersError.NoInternet)
+        )
+        viewModel = UsersViewModel(
+            savedStateHandle = savedStateHandle,
+            repository = secondRepository
+        )
+
+        viewModel.restoreUsers()
+
+        assertEquals(
+            UsersUiState.Error(message = "No internet connection"),
+            viewModel.uiState.value
+        )
     }
 
     private class FakeUsersRepository(
