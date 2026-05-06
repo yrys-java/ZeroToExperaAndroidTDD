@@ -23,4 +23,17 @@ class UsersPage(
         composeTestRule.onNodeWithTag("text_users_item_email_$position", useUnmergedTree = true)
             .assertTextEquals(email)
     }
+
+    fun assertAvatarAt(
+        position: Int,
+        initials: String
+    ) {
+        composeTestRule.onNodeWithTag("image_users_item_avatar_$position")
+            .assertIsDisplayed()
+
+        composeTestRule.onNodeWithTag(
+            testTag = "text_users_item_avatar_initials_$position",
+            useUnmergedTree = true
+        ).assertTextEquals(initials)
+    }
 }

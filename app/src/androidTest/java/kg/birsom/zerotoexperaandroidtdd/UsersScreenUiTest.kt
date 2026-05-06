@@ -54,5 +54,14 @@ class UsersScreenUiTest {
             name = "Ervin Howell",
             email = "Shanna@melissa.tv"
         )
+
+        usersPage.assertAvatarAt(
+            position = 0,
+            initials = "LG"
+        )
+        usersPage.assertAvatarAt(
+            position = 1,
+            initials = "EH"
+        )
     }
 }
