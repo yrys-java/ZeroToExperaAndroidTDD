@@ -64,4 +64,58 @@ class UsersScreenUiTest {
             initials = "EH"
         )
     }
+
+    @Test
+    fun shows_placeholder_initial_when_user_name_is_empty() {
+        composeTestRule.setContent {
+            ZeroToExperaAndroidTDDTheme {
+                UsersScreen(
+                    uiState = UsersUiState.Content(
+                        users = listOf(
+                            UserUi(
+                                id = 1,
+                                name = "",
+                                email = "empty@example.com"
+                            )
+                        ),
+                        offline = false
+                    ),
+                    onRetryClick = {},
+                    onUserClick = {}
+                )
+            }
+        }
+
+        usersPage.assertAvatarAt(
+            position = 0,
+            initials = "?"
+        )
+    }
+
+    @Test
+    fun shows_avatar_without_lastname() {
+        composeTestRule.setContent {
+            ZeroToExperaAndroidTDDTheme {
+                UsersScreen(
+                    uiState = UsersUiState.Content(
+                        users = listOf(
+                            UserUi(
+                                id = 1,
+                                name = "Ervin",
+                                email = "empty@example.com"
+                            )
+                        ),
+                        offline = false
+                    ),
+                    onRetryClick = {},
+                    onUserClick = {}
+                )
+            }
+        }
+
+        usersPage.assertAvatarAt(
+            position = 0,
+            initials = "E"
+        )
+    }
 }

@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
 
 class UsersPage(
     private val composeTestRule: ComposeTestRule
@@ -14,13 +15,13 @@ class UsersPage(
         name: String,
         email: String
     ) {
-        composeTestRule.onNodeWithTag("card_users_item_$position")
+        composeTestRule.onNodeWithTag(UsersScreenTags.cardUserItem(position))
             .assertIsDisplayed()
 
-        composeTestRule.onNodeWithTag("text_users_item_name_$position", useUnmergedTree = true)
+        composeTestRule.onNodeWithTag(UsersScreenTags.textUserName(position), useUnmergedTree = true)
             .assertTextEquals(name)
 
-        composeTestRule.onNodeWithTag("text_users_item_email_$position", useUnmergedTree = true)
+        composeTestRule.onNodeWithTag(UsersScreenTags.textUserEmail(position), useUnmergedTree = true)
             .assertTextEquals(email)
     }
 
@@ -28,11 +29,13 @@ class UsersPage(
         position: Int,
         initials: String
     ) {
-        composeTestRule.onNodeWithTag("image_users_item_avatar_$position")
-            .assertIsDisplayed()
+        composeTestRule.onNodeWithTag(
+            testTag = UsersScreenTags.imageUserAvatar(position),
+            useUnmergedTree = true
+        ).assertIsDisplayed()
 
         composeTestRule.onNodeWithTag(
-            testTag = "text_users_item_avatar_initials_$position",
+            testTag = UsersScreenTags.textUserAvatarInitials(position),
             useUnmergedTree = true
         ).assertTextEquals(initials)
     }
