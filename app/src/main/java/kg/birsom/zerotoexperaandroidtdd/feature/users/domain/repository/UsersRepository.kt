@@ -8,4 +8,6 @@ interface UsersRepository {
     suspend fun getUsers(): UsersResult
 
     suspend fun getUser(id: Int): UserResult
+
+    suspend fun getCachedUsers(): UsersResult
 }

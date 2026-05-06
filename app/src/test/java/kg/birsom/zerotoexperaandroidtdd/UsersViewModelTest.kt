@@ -118,14 +118,21 @@ class UsersViewModelTest {
 
     private class FakeUsersRepository(
         usersResult: UsersResult = UsersResult.Error(UsersError.NoInternet),
+        private val cachedUsersResult: UsersResult = UsersResult.Error(UsersError.NoInternet),
         private val usersResults: MutableList<UsersResult> = mutableListOf(usersResult)
     ) : UsersRepository {
 
         var getUsersCalledCount = 0
+        var getCachedUsersCalledCount = 0
 
         override suspend fun getUsers(): UsersResult {
             getUsersCalledCount++
             return usersResults.removeFirst()
+        }
+
+        override suspend fun getCachedUsers(): UsersResult {
+            getCachedUsersCalledCount++
+            return cachedUsersResult
         }
 
         override suspend fun getUser(id: Int): UserResult {

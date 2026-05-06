@@ -21,13 +21,7 @@ class UsersRepositoryImpl(
             dao.insertUsers(users.map { it.toEntity() })
             UsersResult.Fresh(users)
         } catch (_: Exception) {
-            val cachedUsers = dao.getUsers().map { it.toDomain() }
-
-            if (cachedUsers.isNotEmpty()) {
-                UsersResult.Cached(cachedUsers)
-            } else {
-                UsersResult.Error(UsersError.NoInternet)
-            }
+            getCachedUsers()
         }
     }
 
@@ -38,6 +32,16 @@ class UsersRepositoryImpl(
             UserResult.Success(user)
         } else {
             UserResult.Error(UserError.NotFound)
+        }
+    }
+
+    override suspend fun getCachedUsers(): UsersResult {
+        val cachedUsers = dao.getUsers().map { it.toDomain() }
+
+        return if (cachedUsers.isNotEmpty()) {
+            UsersResult.Cached(cachedUsers)
+        } else {
+            UsersResult.Error(UsersError.NoInternet)
         }
     }
 }

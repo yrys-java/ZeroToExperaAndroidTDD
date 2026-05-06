@@ -127,12 +127,60 @@ class UsersRepositoryTest {
         )
     }
 
+    @Test
+    fun returns_cached_users_without_api_call() = runBlocking {
+        val api = FakeUserApi(
+            users = listOf(
+                userResponse(id = 9, name = "Remote User")
+            )
+        )
+        val dao = FakeUserDao(
+            cachedUsers = listOf(
+                userEntity(id = 1, name = "Cached Leanne"),
+                userEntity(id = 2, name = "Cached Ervin")
+            )
+        )
+        val repository: UsersRepository = UsersRepositoryImpl(
+            api = api,
+            dao = dao
+        )
+
+        val result = repository.getCachedUsers() as UsersResult.Cached
+        val users = result.users
+
+        assertEquals(0, api.getUsersCalledCount)
+        assertEquals(2, users.size)
+        assertEquals("Cached Leanne", users[0].name)
+        assertEquals("Cached Ervin", users[1].name)
+    }
+
+    @Test
+    fun returns_error_when_cached_users_are_empty() = runBlocking {
+        val api = FakeUserApi()
+        val dao = FakeUserDao()
+        val repository: UsersRepository = UsersRepositoryImpl(
+            api = api,
+            dao = dao
+        )
+
+        val result = repository.getCachedUsers()
+
+        assertEquals(
+            UsersResult.Error(UsersError.NoInternet),
+            result
+        )
+        assertEquals(0, api.getUsersCalledCount)
+    }
+
     private class FakeUserApi(
         private val users: List<UserResponse> = emptyList(),
         private val error: Exception? = null
     ) : UserApi {
 
+        var getUsersCalledCount = 0
+
         override suspend fun getUsers(): List<UserResponse> {
+            getUsersCalledCount++
             error?.let { throw it }
             return users
         }
