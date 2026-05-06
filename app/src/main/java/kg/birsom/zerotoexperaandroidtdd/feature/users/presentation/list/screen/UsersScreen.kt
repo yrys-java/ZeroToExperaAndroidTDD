@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.component.UsersError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.element.UserAvatar
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UserUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UsersUiState
@@ -55,7 +56,10 @@ fun UsersScreen(
 
             is UsersUiState.Loading -> UsersLoading()
 
-            is UsersUiState.Error -> Unit
+            is UsersUiState.Error -> UsersError(
+                message = uiState.message,
+                onRetryClick = onRetryClick
+            )
         }
     }
 }
@@ -199,6 +203,18 @@ private fun UsersScreenLoadingPreview() {
     ZeroToExperaAndroidTDDTheme {
         UsersScreen(
             uiState = UsersUiState.Loading,
+            onRetryClick = {},
+            onUserClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UsersScreenErrorPreview() {
+    ZeroToExperaAndroidTDDTheme {
+        UsersScreen(
+            uiState = TestUiData.usersError,
             onRetryClick = {},
             onUserClick = {}
         )
