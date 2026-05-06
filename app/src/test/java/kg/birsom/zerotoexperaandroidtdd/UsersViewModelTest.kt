@@ -82,12 +82,50 @@ class UsersViewModelTest {
         )
     }
 
+    @Test
+    fun retry_loads_users_again_after_error() = runBlocking {
+        val repository = FakeUsersRepository(
+            usersResults = mutableListOf(
+                UsersResult.Error(UsersError.NoInternet),
+                UsersResult.Fresh(
+                    users = listOf(
+                        user(id = 1, name = "Leanne Graham")
+                    )
+                )
+            )
+        )
+        val viewModel = UsersViewModel(repository)
+
+        viewModel.loadUsers()
+        assertEquals(
+            UsersUiState.Error(message = "No internet connection"),
+            viewModel.uiState.value
+        )
+
+        viewModel.retry()
+
+        assertEquals(
+            UsersUiState.Content(
+                users = listOf(
+                    UserUi(id = 1, name = "Leanne Graham", email = "user1@example.com")
+                ),
+                offline = false
+            ),
+            viewModel.uiState.value
+        )
+        assertEquals(2, repository.getUsersCalledCount)
+    }
+
     private class FakeUsersRepository(
-        private val usersResult: UsersResult
+        usersResult: UsersResult = UsersResult.Error(UsersError.NoInternet),
+        private val usersResults: MutableList<UsersResult> = mutableListOf(usersResult)
     ) : UsersRepository {
 
+        var getUsersCalledCount = 0
+
         override suspend fun getUsers(): UsersResult {
-            return usersResult
+            getUsersCalledCount++
+            return usersResults.removeFirst()
         }
 
         override suspend fun getUser(id: Int): UserResult {

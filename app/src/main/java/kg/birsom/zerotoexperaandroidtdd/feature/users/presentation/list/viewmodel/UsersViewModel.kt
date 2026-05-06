@@ -35,6 +35,10 @@ class UsersViewModel(
         }
     }
 
+    suspend fun retry() {
+        loadUsers()
+    }
+
     private fun UsersError.message(): String {
         return when (this) {
             UsersError.NoInternet -> "No internet connection"
