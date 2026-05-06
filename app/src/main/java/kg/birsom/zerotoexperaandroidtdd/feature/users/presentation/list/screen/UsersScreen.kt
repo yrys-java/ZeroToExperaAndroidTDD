@@ -3,6 +3,7 @@ package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -51,7 +53,7 @@ fun UsersScreen(
                 onUserClick = onUserClick
             )
 
-            UsersUiState.Loading -> Unit
+            is UsersUiState.Loading -> UsersLoading()
 
             is UsersUiState.Error -> Unit
         }
@@ -165,12 +167,38 @@ private fun UserListItem(
     }
 }
 
+@Composable
+private fun UsersLoading() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag(UsersScreenTags.BOX_USERS_LOADING),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.testTag(UsersScreenTags.PROGRESS_USERS_LOADING)
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun UsersScreenContentPreview() {
     ZeroToExperaAndroidTDDTheme {
         UsersScreen(
             uiState = TestUiData.usersContent,
+            onRetryClick = {},
+            onUserClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UsersScreenLoadingPreview() {
+    ZeroToExperaAndroidTDDTheme {
+        UsersScreen(
+            uiState = UsersUiState.Loading,
             onRetryClick = {},
             onUserClick = {}
         )
