@@ -28,9 +28,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.element.UserAvatar
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UserUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UsersUiState
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.TestUiData
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
@@ -117,7 +119,7 @@ private fun UserListItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .testTag("card_users_item_$position"),
+            .testTag(UsersScreenTags.cardUserItem(position)),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -126,6 +128,12 @@ private fun UserListItem(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            UserAvatar(
+                name = user.name,
+                position = position
+            )
+
+            Spacer(modifier = Modifier.padding(start = 16.dp))
             Column(
                 modifier = Modifier.weight(1f)
             ) {
@@ -135,7 +143,7 @@ private fun UserListItem(
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.testTag("text_users_item_name_$position")
+                    modifier = Modifier.testTag(UsersScreenTags.textUserName(position))
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
@@ -144,7 +152,7 @@ private fun UserListItem(
                     color = Color(0xFF667085),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.testTag("text_users_item_email_$position")
+                    modifier = Modifier.testTag(UsersScreenTags.textUserEmail(position))
                 )
             }
 
