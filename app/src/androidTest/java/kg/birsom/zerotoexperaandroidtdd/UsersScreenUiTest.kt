@@ -2,9 +2,9 @@ package kg.birsom.zerotoexperaandroidtdd
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.UsersScreen
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UserUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UsersUiState
-import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.ui.UsersScreen
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
 import org.junit.Rule
 import org.junit.Test
