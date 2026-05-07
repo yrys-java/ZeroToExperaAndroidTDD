@@ -8,6 +8,9 @@ object UsersScreenTags {
     const val TEXT_USERS_ERROR_MESSAGE = "text_users_error_message"
     const val BUTTON_USERS_RETRY = "button_users_retry"
 
+    const val BOX_USERS_OFFLINE_BANNER = "box_users_offline_banner"
+    const val TEXT_USERS_OFFLINE_BANNER = "text_users_offline_banner"
+
     fun cardUserItem(position: Int) = "card_users_item_$position"
 
     fun imageUserAvatar(position: Int) = "image_users_item_avatar_$position"

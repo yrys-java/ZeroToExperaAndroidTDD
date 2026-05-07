@@ -80,4 +80,19 @@ class UsersPage(
         composeTestRule.onNodeWithTag(UsersScreenTags.BOX_USERS_LOADING)
             .assertDoesNotExist()
     }
+
+    fun assertOfflineBanner(message: String) {
+        composeTestRule.onNodeWithTag(UsersScreenTags.BOX_USERS_OFFLINE_BANNER)
+            .assertIsDisplayed()
+
+        composeTestRule.onNodeWithTag(
+            testTag = UsersScreenTags.TEXT_USERS_OFFLINE_BANNER,
+            useUnmergedTree = true
+        ).assertTextEquals(message)
+    }
+
+    fun assertErrorDoesNotExist() {
+        composeTestRule.onNodeWithTag(UsersScreenTags.CARD_USERS_ERROR)
+            .assertDoesNotExist()
+    }
 }

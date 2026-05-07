@@ -162,4 +162,35 @@ class UsersScreenUiTest {
 
         assertEquals(1, retryClickedCount)
     }
+
+    @Test
+    fun shows_offline_banner_with_cached_users_without_loading_and_error() {
+        composeTestRule.setContent {
+            ZeroToExperaAndroidTDDTheme {
+                UsersScreen(
+                    uiState = UsersUiState.Content(
+                        users = listOf(
+                            UserUi(
+                                id = 1,
+                                name = "Cached Leanne",
+                                email = "cached@example.com"
+                            )
+                        ),
+                        offline = true
+                    ),
+                    onRetryClick = {},
+                    onUserClick = {}
+                )
+            }
+        }
+
+        usersPage.assertUserAt(
+            position = 0,
+            name = "Cached Leanne",
+            email = "cached@example.com"
+        )
+        usersPage.assertOfflineBanner(message = "Offline mode: cached data")
+        usersPage.assertLoadingDoesNotExist()
+        usersPage.assertErrorDoesNotExist()
+    }
 }
