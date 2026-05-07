@@ -304,7 +304,6 @@ class UsersRepositoryTest {
                 result
             )
             assertEquals(1, api.getUsersCalledCount)
-            assertEquals("Cached Leanne", result)
         }
     }
 

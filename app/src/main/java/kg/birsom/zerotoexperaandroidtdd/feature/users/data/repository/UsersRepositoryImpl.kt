@@ -19,20 +19,32 @@ class UsersRepositoryImpl(
     private val networkConnectivityService: NetworkConnectivityService? = null
 ) : UsersRepository {
 
-    override suspend fun getUsers(): UsersResult {
+    override suspend fun getUsers(forceUpdate: Boolean): UsersResult {
         if (networkConnectivityService?.currentStatus() == NetworkStatus.Disconnected) {
-            return getCachedUsers(fallbackError = UsersError.NoInternet)
+            return if (forceUpdate) {
+                UsersResult.Error(UsersError.NoInternet)
+            } else {
+                getCachedUsers(fallbackError = UsersError.NoInternet)
+            }
         }
 
         return try {
-            val users = api.getUsers().map { it.toDomain() }
-            dao.insertUsers(users.map { it.toEntity() })
-            UsersResult.Fresh(users)
+            loadFreshUsers()
         } catch (exception: Exception) {
-            getCachedUsers(
-                fallbackError = NetworkErrorHandler.handle(exception)
-            )
+            val error = NetworkErrorHandler.handle(exception)
+
+            if (forceUpdate) {
+                UsersResult.Error(error)
+            } else {
+                getCachedUsers(fallbackError = error)
+            }
         }
+    }
+
+    private suspend fun loadFreshUsers(): UsersResult.Fresh {
+        val users = api.getUsers().map { it.toDomain() }
+        dao.insertUsers(users.map { it.toEntity() })
+        return UsersResult.Fresh(users)
     }
 
     override suspend fun getUser(id: Int): UserResult {

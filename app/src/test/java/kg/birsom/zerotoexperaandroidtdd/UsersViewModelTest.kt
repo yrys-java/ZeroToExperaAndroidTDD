@@ -246,7 +246,7 @@ class UsersViewModelTest {
         var getUsersCalledCount = 0
         var getCachedUsersCalledCount = 0
 
-        override suspend fun getUsers(): UsersResult {
+        override suspend fun getUsers(forceUpdate: Boolean): UsersResult {
             getUsersCalledCount++
             return usersResults.removeFirst()
         }

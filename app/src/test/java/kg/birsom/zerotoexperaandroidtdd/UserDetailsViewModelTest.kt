@@ -113,7 +113,7 @@ class UserDetailsViewModelTest {
 
         var requestedUserId: Int? = null
 
-        override suspend fun getUsers(): UsersResult {
+        override suspend fun getUsers(forceUpdate: Boolean): UsersResult {
             throw IllegalStateException("Not used in this test")
         }
 

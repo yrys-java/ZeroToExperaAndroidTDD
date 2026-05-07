@@ -5,7 +5,7 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersResult
 
 interface UsersRepository {
 
-    suspend fun getUsers(): UsersResult
+    suspend fun getUsers(forceUpdate: Boolean = false): UsersResult
 
     suspend fun getUser(id: Int): UserResult
 
