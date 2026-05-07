@@ -1,5 +1,6 @@
 package kg.birsom.zerotoexperaandroidtdd
 
+import kg.birsom.zerotoexperaandroidtdd.core.network.exception.ServerException
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.local.dao.UserDao
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.local.entity.UserEntity
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.remote.api.UserApi
@@ -16,6 +17,7 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.repository.UsersRep
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.net.UnknownHostException
 
 class UsersRepositoryTest {
 
@@ -155,21 +157,53 @@ class UsersRepositoryTest {
     }
 
     @Test
-    fun returns_error_when_cached_users_are_empty() = runBlocking {
-        val api = FakeUserApi()
+    fun returns_no_internet_when_api_fails_without_connection_and_cache_is_empty() = runBlocking {
+        val api = FakeUserApi(
+            error = UnknownHostException()
+        )
         val dao = FakeUserDao()
         val repository: UsersRepository = UsersRepositoryImpl(
             api = api,
             dao = dao
         )
 
-        val result = repository.getCachedUsers()
+        val result = repository.getUsers()
 
         assertEquals(
             UsersResult.Error(UsersError.NoInternet),
             result
         )
-        assertEquals(0, api.getUsersCalledCount)
+    }
+
+    @Test
+    fun returns_mapped_error_when_api_fails_and_cache_is_empty() = runBlocking {
+        val scenarios = listOf(
+            ServerException.Unauthorized to UsersError.Unauthorized,
+            ServerException.Forbidden to UsersError.Forbidden,
+            ServerException.NotFound to UsersError.NotFound,
+            ServerException.TooManyRequests to UsersError.ServerUnavailable,
+            ServerException.InternalServerError to UsersError.ServerUnavailable,
+            ServerException.BadGateway to UsersError.ServerUnavailable,
+            ServerException.ServiceUnavailable to UsersError.ServerUnavailable,
+            ServerException.EmptyResponse to UsersError.EmptyResponse,
+            ServerException.Unknown to UsersError.Unknown
+        )
+
+        scenarios.forEach { (exception, expectedError) ->
+            val api = FakeUserApi(error = exception)
+            val dao = FakeUserDao()
+            val repository: UsersRepository = UsersRepositoryImpl(
+                api = api,
+                dao = dao
+            )
+
+            val result = repository.getUsers()
+
+            assertEquals(
+                UsersResult.Error(expectedError),
+                result
+            )
+        }
     }
 
     private class FakeUserApi(
