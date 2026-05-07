@@ -51,6 +51,7 @@ fun UsersScreen(
         when (uiState) {
             is UsersUiState.Content -> UsersContent(
                 users = uiState.users,
+                offline = uiState.offline,
                 onUserClick = onUserClick
             )
 
@@ -67,10 +68,15 @@ fun UsersScreen(
 @Composable
 private fun UsersContent(
     users: List<UserUi>,
+    offline: Boolean,
     onUserClick: (Int) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         UsersHeader()
+
+        if (offline) {
+            OfflineBanner()
+        }
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -172,6 +178,25 @@ private fun UserListItem(
 }
 
 @Composable
+private fun OfflineBanner() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFFD1E9FF))
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .testTag(UsersScreenTags.BOX_USERS_OFFLINE_BANNER)
+    ) {
+        Text(
+            text = "Offline mode: cached data",
+            color = Color(0xFF175CD3),
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.testTag(UsersScreenTags.TEXT_USERS_OFFLINE_BANNER)
+        )
+    }
+}
+
+@Composable
 private fun UsersLoading() {
     Box(
         modifier = Modifier
@@ -215,6 +240,18 @@ private fun UsersScreenErrorPreview() {
     ZeroToExperaAndroidTDDTheme {
         UsersScreen(
             uiState = TestUiData.usersError,
+            onRetryClick = {},
+            onUserClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UsersScreenOfflinePreview() {
+    ZeroToExperaAndroidTDDTheme {
+        UsersScreen(
+            uiState = TestUiData.usersOfflineContent,
             onRetryClick = {},
             onUserClick = {}
         )
