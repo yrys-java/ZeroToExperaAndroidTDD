@@ -1,6 +1,8 @@
 package kg.birsom.zerotoexperaandroidtdd
 
 import kg.birsom.zerotoexperaandroidtdd.core.network.exception.ServerException
+import kg.birsom.zerotoexperaandroidtdd.core.network.manager.NetworkConnectivityService
+import kg.birsom.zerotoexperaandroidtdd.core.network.manager.NetworkStatus
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.local.dao.UserDao
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.local.entity.UserEntity
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.remote.api.UserApi
@@ -14,6 +16,8 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UserResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.repository.UsersRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -234,6 +238,105 @@ class UsersRepositoryTest {
                 UsersResult.Error(expectedError),
                 result
             )
+        }
+    }
+
+    @Test
+    fun force_update_returns_no_internet_without_api_call_when_disconnected() = runBlocking {
+        val api = FakeUserApi(
+            users = listOf(
+                userResponse(id = 9, name = "Remote User")
+            )
+        )
+        val dao = FakeUserDao(
+            cachedUsers = listOf(
+                userEntity(id = 1, name = "Cached Leanne")
+            )
+        )
+        val repository: UsersRepository = UsersRepositoryImpl(
+            api = api,
+            dao = dao,
+            networkConnectivityService = FakeNetworkConnectivityService(
+                status = NetworkStatus.Disconnected
+            )
+        )
+
+        val result = repository.getUsers(forceUpdate = true)
+
+        assertEquals(
+            UsersResult.Error(UsersError.NoInternet),
+            result
+        )
+        assertEquals(0, api.getUsersCalledCount)
+    }
+
+    @Test
+    fun force_update_returns_mapped_error_without_cache_fallback_when_api_fails() = runBlocking {
+        val scenarios = listOf(
+            ServerException.Unauthorized to UsersError.Unauthorized,
+            ServerException.Forbidden to UsersError.Forbidden,
+            ServerException.NotFound to UsersError.NotFound,
+            ServerException.TooManyRequests to UsersError.ServerUnavailable,
+            ServerException.InternalServerError to UsersError.ServerUnavailable,
+            ServerException.BadGateway to UsersError.ServerUnavailable,
+            ServerException.ServiceUnavailable to UsersError.ServerUnavailable,
+            ServerException.EmptyResponse to UsersError.EmptyResponse,
+            ServerException.Unknown to UsersError.Unknown,
+            UnknownHostException() to UsersError.NoInternet
+        )
+
+        scenarios.forEach { (exception, expectedError) ->
+            val api = FakeUserApi(error = exception)
+            val dao = FakeUserDao(
+                cachedUsers = listOf(
+                    userEntity(id = 1, name = "Cached Leanne")
+                )
+            )
+            val repository: UsersRepository = UsersRepositoryImpl(
+                api = api,
+                dao = dao
+            )
+
+            val result = repository.getUsers(forceUpdate = true)
+
+            assertEquals(
+                UsersResult.Error(expectedError),
+                result
+            )
+            assertEquals(1, api.getUsersCalledCount)
+            assertEquals("Cached Leanne", result)
+        }
+    }
+
+    @Test
+    fun regular_load_returns_cached_users_when_api_fails_and_cache_exists() = runBlocking {
+        val api = FakeUserApi(
+            error = ServerException.Forbidden
+        )
+        val dao = FakeUserDao(
+            cachedUsers = listOf(
+                userEntity(id = 1, name = "Cached Leanne")
+            )
+        )
+        val repository: UsersRepository = UsersRepositoryImpl(
+            api = api,
+            dao = dao
+        )
+
+        val result = repository.getUsers(forceUpdate = false) as UsersResult.Cached
+
+        assertEquals("Cached Leanne", result.users.first().name)
+    }
+
+    private class FakeNetworkConnectivityService(
+        private val status: NetworkStatus
+    ) : NetworkConnectivityService {
+
+        override val networkStatus: Flow<NetworkStatus>
+            get() = flowOf(status)
+
+        override fun currentStatus(): NetworkStatus {
+            return status
         }
     }
 
