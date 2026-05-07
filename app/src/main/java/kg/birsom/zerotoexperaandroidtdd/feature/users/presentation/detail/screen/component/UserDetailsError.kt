@@ -1,4 +1,4 @@
-package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.component
+package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.screen.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -24,41 +23,41 @@ import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.UiText
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.asString
-import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.TestUiData
-import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.test_data.UserDetailsScreenTags
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.test_data.UserDetailsTestUiData
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppCardBackground
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppTextPrimary
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppTextSecondary
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
-fun UsersError(
+fun UserDetailsError(
     message: UiText,
-    onRetryClick: () -> Unit
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(24.dp),
         contentAlignment = Alignment.Center
     ) {
         Card(
-            modifier = Modifier.testTag(UsersScreenTags.CARD_USERS_ERROR),
-            shape = RoundedCornerShape(24.dp),
+            modifier = Modifier.testTag(UserDetailsScreenTags.CARD_DETAILS_ERROR),
+            shape = RoundedCornerShape(28.dp),
             colors = CardDefaults.cardColors(containerColor = AppCardBackground),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
         ) {
             Column(
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier.padding(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(R.string.users_error_title),
+                    text = stringResource(R.string.user_details_error_title),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = AppTextPrimary,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.testTag(UsersScreenTags.TEXT_USERS_ERROR_TITLE)
+                    modifier = Modifier.testTag(UserDetailsScreenTags.TEXT_DETAILS_ERROR_TITLE)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -68,17 +67,8 @@ fun UsersError(
                     style = MaterialTheme.typography.bodyMedium,
                     color = AppTextSecondary,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.testTag(UsersScreenTags.TEXT_USERS_ERROR_MESSAGE)
+                    modifier = Modifier.testTag(UserDetailsScreenTags.TEXT_DETAILS_ERROR_MESSAGE)
                 )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = onRetryClick,
-                    modifier = Modifier.testTag(UsersScreenTags.BUTTON_USERS_RETRY)
-                ) {
-                    Text(text = stringResource(R.string.users_retry))
-                }
             }
         }
     }
@@ -86,11 +76,8 @@ fun UsersError(
 
 @Preview(showBackground = true)
 @Composable
-private fun UsersErrorPreview() {
+private fun UserDetailsErrorPreview() {
     ZeroToExperaAndroidTDDTheme {
-        UsersError(
-            message = TestUiData.usersError.message,
-            onRetryClick = {}
-        )
+        UserDetailsError(message = UserDetailsTestUiData.detailsError.message)
     }
 }

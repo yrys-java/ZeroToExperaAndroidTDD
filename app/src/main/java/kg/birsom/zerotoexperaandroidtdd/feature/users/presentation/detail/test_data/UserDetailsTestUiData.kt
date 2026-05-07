@@ -1,5 +1,7 @@
 package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.test_data
 
+import kg.birsom.zerotoexperaandroidtdd.R
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.UiText
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUiState
 
@@ -18,5 +20,9 @@ object UserDetailsTestUiData {
 
     val detailsContent = UserDetailsUiState.Content(
         user = leanne
+    )
+
+    val detailsError = UserDetailsUiState.Error(
+        message = UiText.Res(R.string.user_details_error_not_found)
     )
 }

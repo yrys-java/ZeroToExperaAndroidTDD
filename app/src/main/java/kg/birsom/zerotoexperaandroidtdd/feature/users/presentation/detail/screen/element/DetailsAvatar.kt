@@ -1,4 +1,4 @@
-package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.element
+package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.screen.element
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,36 +10,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppBrand
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppOnBrand
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
-fun UserAvatar(
-    name: String,
-    position: Int,
-    size: Dp = 58.dp
+fun DetailsAvatar(
+    name: String
 ) {
     Box(
         modifier = Modifier
-            .size(size)
+            .size(82.dp)
             .clip(CircleShape)
-            .background(AppBrand)
-            .testTag(UsersScreenTags.imageUserAvatar(position)),
+            .background(AppBrand),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = name.initials(),
-            color = AppOnBrand,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.testTag(UsersScreenTags.textUserAvatarInitials(position))
+            color = AppOnBrand
         )
     }
 }
@@ -57,33 +50,24 @@ private fun String.initials(): String {
 
 @Preview(showBackground = true)
 @Composable
-private fun UserAvatarPreview() {
+private fun DetailsAvatarPreview() {
     ZeroToExperaAndroidTDDTheme {
-        UserAvatar(
-            name = "Leanne Graham",
-            position = 0
-        )
+        DetailsAvatar(name = "Leanne Graham")
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun NameUserAvatarPreview() {
+private fun SingleNameDetailsAvatarPreview() {
     ZeroToExperaAndroidTDDTheme {
-        UserAvatar(
-            name = "Leanne",
-            position = 0
-        )
+        DetailsAvatar(name = "Leanne")
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun EmptyUserAvatarPreview() {
+private fun EmptyDetailsAvatarPreview() {
     ZeroToExperaAndroidTDDTheme {
-        UserAvatar(
-            name = "",
-            position = 0
-        )
+        DetailsAvatar(name = "")
     }
 }

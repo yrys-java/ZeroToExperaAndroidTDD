@@ -2,6 +2,8 @@ package kg.birsom.zerotoexperaandroidtdd
 
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.UiText
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.screen.UserDetailsScreen
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUiState
@@ -74,7 +76,7 @@ class UserDetailsScreenUiTest {
             ZeroToExperaAndroidTDDTheme {
                 UserDetailsScreen(
                     uiState = UserDetailsUiState.Error(
-                        message = "User not found"
+                        message = UiText.Res(R.string.user_details_error_not_found)
                     ),
                     onBackClick = {},
                 )
@@ -82,8 +84,8 @@ class UserDetailsScreenUiTest {
         }
 
         detailsPage.assertNotFoundError(
-            title = "Cannot open user",
-            message = "User not found"
+            title = string(R.string.user_details_error_title),
+            message = string(R.string.user_details_error_not_found)
         )
         detailsPage.assertContentDoesNotExist()
     }
@@ -98,4 +100,10 @@ class UserDetailsScreenUiTest {
         address = "Kulas Light, Apt. 556, Gwenborough, 92998-3874",
         company = "Romaguera-Crona"
     )
+
+    private fun string(id: Int): String {
+        return InstrumentationRegistry.getInstrumentation()
+            .targetContext
+            .getString(id)
+    }
 }

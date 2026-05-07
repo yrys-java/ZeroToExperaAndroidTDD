@@ -2,9 +2,11 @@ package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.viewmod
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.repository.UsersRepository
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.UiText
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.mapper.toUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UsersUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,9 +58,9 @@ class UsersViewModel(
         }
     }
 
-    private fun UsersError.message(): String {
+    private fun UsersError.message(): UiText {
         return when (this) {
-            UsersError.NoInternet -> "No internet connection"
+            UsersError.NoInternet -> UiText.Res(R.string.users_error_no_internet)
         }
     }
 }

@@ -9,6 +9,7 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UserError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UserResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.repository.UsersRepository
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.UiText
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUiState
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.viewmodel.UserDetailsViewModel
@@ -69,7 +70,7 @@ class UserDetailsViewModelTest {
         viewModel.loadUser()
 
         assertEquals(
-            UserDetailsUiState.Error(message = "User not found"),
+            UserDetailsUiState.Error(message = UiText.Res(R.string.user_details_error_not_found)),
             viewModel.uiState.value
         )
     }

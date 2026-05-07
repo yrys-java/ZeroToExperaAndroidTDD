@@ -9,6 +9,7 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UserResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.repository.UsersRepository
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.UiText
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UserUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UsersUiState
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.viewmodel.UsersViewModel
@@ -88,7 +89,7 @@ class UsersViewModelTest {
         viewModel.loadUsers()
 
         assertEquals(
-            UsersUiState.Error(message = "No internet connection"),
+            UsersUiState.Error(message = UiText.Res(R.string.users_error_no_internet)),
             viewModel.uiState.value
         )
     }
@@ -112,7 +113,7 @@ class UsersViewModelTest {
 
         viewModel.loadUsers()
         assertEquals(
-            UsersUiState.Error(message = "No internet connection"),
+            UsersUiState.Error(message = UiText.Res(R.string.users_error_no_internet)),
             viewModel.uiState.value
         )
 
@@ -202,7 +203,7 @@ class UsersViewModelTest {
         viewModel.restoreUsers()
 
         assertEquals(
-            UsersUiState.Error(message = "No internet connection"),
+            UsersUiState.Error(message = UiText.Res(R.string.users_error_no_internet)),
             viewModel.uiState.value
         )
     }

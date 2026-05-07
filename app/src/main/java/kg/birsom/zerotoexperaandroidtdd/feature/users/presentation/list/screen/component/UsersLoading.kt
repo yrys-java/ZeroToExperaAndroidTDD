@@ -11,11 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
+import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppTextSecondary
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
@@ -35,9 +37,9 @@ fun UsersLoading() {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Loading users...",
+                text = stringResource(R.string.users_loading),
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFF667085),
+                color = AppTextSecondary,
                 modifier = Modifier.testTag(UsersScreenTags.TEXT_USERS_LOADING)
             )
         }

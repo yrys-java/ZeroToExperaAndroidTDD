@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">ZeroToExperaAndroidTDD</string>
+    <string name="greeting_name_android">Android</string>
+    <string name="greeting_message">Hello %1$s!</string>
+
+    <string name="content_description_back">Back</string>
+
+    <string name="users_title">Users</string>
+    <string name="users_subtitle">%1$d teammates available</string>
+    <string name="users_loading">Loading users...</string>
+    <string name="users_error_title">Something went wrong</string>
+    <string name="users_error_no_internet">No internet connection</string>
+    <string name="users_retry">Retry</string>
+    <string name="users_offline_banner">Offline mode: cached data</string>
+    <string name="users_item_arrow">›</string>
+
+    <string name="user_details_title">User details</string>
+    <string name="user_details_username">\@%1$s</string>
+    <string name="user_details_section_contacts">Contacts</string>
+    <string name="user_details_section_address">Address</string>
+    <string name="user_details_section_company">Company</string>
+    <string name="user_details_label_email">Email</string>
+    <string name="user_details_label_phone">Phone</string>
+    <string name="user_details_label_website">Website</string>
+    <string name="user_details_label_home">Home</string>
+    <string name="user_details_label_name">Name</string>
+    <string name="user_details_error_title">Cannot open user</string>
+    <string name="user_details_error_not_found">User not found</string>
 </resources>

@@ -2,7 +2,9 @@ package kg.birsom.zerotoexperaandroidtdd
 
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import junit.framework.TestCase.assertEquals
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.UiText
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.UsersScreen
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UserUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UsersUiState
@@ -144,7 +146,7 @@ class UsersScreenUiTest {
             ZeroToExperaAndroidTDDTheme {
                 UsersScreen(
                     uiState = UsersUiState.Error(
-                        message = "No internet connection"
+                        message = UiText.Res(R.string.users_error_no_internet)
                     ),
                     onRetryClick = {
                         retryClickedCount++
@@ -154,7 +156,7 @@ class UsersScreenUiTest {
             }
         }
 
-        usersPage.assertError(message = "No internet connection")
+        usersPage.assertError(message = string(R.string.users_error_no_internet))
         usersPage.assertUserDoesNotExist(position = 0)
         usersPage.assertLoadingDoesNotExist()
 
@@ -189,7 +191,7 @@ class UsersScreenUiTest {
             name = "Cached Leanne",
             email = "cached@example.com"
         )
-        usersPage.assertOfflineBanner(message = "Offline mode: cached data")
+        usersPage.assertOfflineBanner(message = string(R.string.users_offline_banner))
         usersPage.assertLoadingDoesNotExist()
         usersPage.assertErrorDoesNotExist()
     }
@@ -229,5 +231,11 @@ class UsersScreenUiTest {
         usersPage.clickUserAt(position = 1)
 
         assertEquals(2, clickedUserId)
+    }
+
+    private fun string(id: Int): String {
+        return InstrumentationRegistry.getInstrumentation()
+            .targetContext
+            .getString(id)
     }
 }

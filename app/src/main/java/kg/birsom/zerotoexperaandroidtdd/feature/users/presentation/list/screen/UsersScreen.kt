@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.component.UsersContent
@@ -13,6 +12,7 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.c
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UsersUiState
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.TestUiData
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
+import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppBackground
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
@@ -25,7 +25,7 @@ fun UsersScreen(
         modifier = Modifier
             .fillMaxSize()
             .testTag(UsersScreenTags.SURFACE_USERS_SCREEN),
-        color = Color(0xFFF6F7FB)
+        color = AppBackground
     ) {
         when (uiState) {
             is UsersUiState.Content -> UsersContent(

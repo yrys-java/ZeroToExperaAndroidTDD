@@ -11,12 +11,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
+import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppBackground
+import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppOfflineContainer
+import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppOfflineText
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
@@ -27,11 +31,11 @@ fun OfflineBanner() {
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .testTag(UsersScreenTags.BOX_USERS_OFFLINE_BANNER),
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFEFF8FF))
+        colors = CardDefaults.cardColors(containerColor = AppOfflineContainer)
     ) {
         Text(
-            text = "Offline mode: cached data",
-            color = Color(0xFF175CD3),
+            text = stringResource(R.string.users_offline_banner),
+            color = AppOfflineText,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
@@ -46,7 +50,7 @@ fun OfflineBanner() {
 private fun OfflineBannerPreview() {
     ZeroToExperaAndroidTDDTheme {
         Box(
-            modifier = Modifier.background(Color(0xFFF6F7FB))
+            modifier = Modifier.background(AppBackground)
         ) {
             OfflineBanner()
         }

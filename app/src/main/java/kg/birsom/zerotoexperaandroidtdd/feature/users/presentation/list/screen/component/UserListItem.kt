@@ -15,16 +15,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.element.UserAvatar
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UserUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.TestUiData
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
+import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppCardBackground
+import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppMutedIcon
+import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppTextPrimary
+import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppTextSecondary
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
@@ -39,7 +44,7 @@ fun UserListItem(
             .clickable(onClick = onClick)
             .testTag(UsersScreenTags.cardUserItem(position)),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = AppCardBackground),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
@@ -64,7 +69,7 @@ fun UserListItem(
                     text = user.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF101828),
+                    color = AppTextPrimary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.testTag(UsersScreenTags.textUserName(position))
@@ -73,7 +78,7 @@ fun UserListItem(
                 Text(
                     text = user.email,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF667085),
+                    color = AppTextSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.testTag(UsersScreenTags.textUserEmail(position))
@@ -81,9 +86,9 @@ fun UserListItem(
             }
 
             Text(
-                text = "›",
+                text = stringResource(R.string.users_item_arrow),
                 style = MaterialTheme.typography.headlineSmall,
-                color = Color(0xFF98A2B3),
+                color = AppMutedIcon,
                 modifier = Modifier.testTag(UsersScreenTags.iconUserArrow(position))
             )
         }

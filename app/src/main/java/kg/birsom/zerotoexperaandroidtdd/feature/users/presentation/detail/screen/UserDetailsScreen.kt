@@ -1,75 +1,65 @@
 package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.screen
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUi
+import kg.birsom.zerotoexperaandroidtdd.R
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.component.UsersTopBar
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.screen.component.UserDetailsContent
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.screen.component.UserDetailsError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUiState
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.test_data.UserDetailsScreenTags
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.test_data.UserDetailsTestUiData
+import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppBackground
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
 fun UserDetailsScreen(
     uiState: UserDetailsUiState,
-    onBackClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
-    when (uiState) {
-        is UserDetailsUiState.Content -> UserDetailsContent(
-            user = uiState.user,
-            onBackClick = onBackClick
-        )
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag(UserDetailsScreenTags.SURFACE_DETAILS_SCREEN),
+        containerColor = AppBackground,
+        topBar = {
+            UsersTopBar(
+                title = stringResource(R.string.user_details_title),
+                onBackClick = onBackClick,
+                backButtonModifier = Modifier.testTag(UserDetailsScreenTags.BUTTON_DETAILS_BACK)
+            )
+        }
+    ) { innerPadding ->
+        when (uiState) {
+            is UserDetailsUiState.Content -> UserDetailsContent(
+                user = uiState.user,
+                modifier = Modifier.padding(innerPadding)
+            )
 
-        UserDetailsUiState.Loading -> Unit
+            is UserDetailsUiState.Error -> UserDetailsError(
+                message = uiState.message,
+                modifier = Modifier.padding(innerPadding)
+            )
 
-        is UserDetailsUiState.Error -> Unit
+            UserDetailsUiState.Loading -> Unit
+        }
     }
 }
 
-@Composable
-private fun UserDetailsContent(
-    user: UserDetailsUi,
-    onBackClick: () -> Unit
-) {
-    Column {
-        Button(
-            onClick = onBackClick,
-            modifier = Modifier.testTag(UserDetailsScreenTags.BUTTON_DETAILS_BACK)
-        ) {
-            Text(text = "Back")
-        }
 
-        Text(
-            text = user.name,
-            modifier = Modifier.testTag(UserDetailsScreenTags.TEXT_DETAILS_NAME)
-        )
-        Text(
-            text = "@${user.username}",
-            modifier = Modifier.testTag(UserDetailsScreenTags.TEXT_DETAILS_USERNAME)
-        )
-        Text(
-            text = user.email,
-            modifier = Modifier.testTag(UserDetailsScreenTags.TEXT_DETAILS_EMAIL)
-        )
-        Text(
-            text = user.phone,
-            modifier = Modifier.testTag(UserDetailsScreenTags.TEXT_DETAILS_PHONE)
-        )
-        Text(
-            text = user.website,
-            modifier = Modifier.testTag(UserDetailsScreenTags.TEXT_DETAILS_WEBSITE)
-        )
-        Text(
-            text = user.address,
-            modifier = Modifier.testTag(UserDetailsScreenTags.TEXT_DETAILS_ADDRESS)
-        )
-        Text(
-            text = user.company,
-            modifier = Modifier.testTag(UserDetailsScreenTags.TEXT_DETAILS_COMPANY)
+@Preview(showBackground = true)
+@Composable
+private fun UserDetailsScreenErrorPreview() {
+    ZeroToExperaAndroidTDDTheme {
+        UserDetailsScreen(
+            uiState = UserDetailsTestUiData.detailsError,
+            onBackClick = {}
         )
     }
 }
@@ -80,7 +70,7 @@ private fun UserDetailsScreenContentPreview() {
     ZeroToExperaAndroidTDDTheme {
         UserDetailsScreen(
             uiState = UserDetailsTestUiData.detailsContent,
-            onBackClick = {},
+            onBackClick = {}
         )
     }
 }

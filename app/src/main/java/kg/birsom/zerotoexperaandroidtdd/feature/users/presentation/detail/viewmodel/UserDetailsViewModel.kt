@@ -2,9 +2,11 @@ package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.viewm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UserError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UserResult
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.repository.UsersRepository
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.UiText
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.mapper.toDetailsUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,9 +43,9 @@ class UserDetailsViewModel(
         )
     }
 
-    private fun UserError.message(): String {
+    private fun UserError.message(): UiText {
         return when (this) {
-            UserError.NotFound -> "User not found"
+            UserError.NotFound -> UiText.Res(R.string.user_details_error_not_found)
         }
     }
 }

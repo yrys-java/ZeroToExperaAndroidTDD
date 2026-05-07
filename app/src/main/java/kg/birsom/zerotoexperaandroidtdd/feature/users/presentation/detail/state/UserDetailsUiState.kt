@@ -1,5 +1,7 @@
 package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state
 
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.UiText
+
 sealed interface UserDetailsUiState {
 
     data object Loading : UserDetailsUiState
@@ -9,6 +11,6 @@ sealed interface UserDetailsUiState {
     ) : UserDetailsUiState
 
     data class Error(
-        val message: String
+        val message: UiText
     ) : UserDetailsUiState
 }

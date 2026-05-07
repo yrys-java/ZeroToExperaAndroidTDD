@@ -1,5 +1,7 @@
 package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data
 
+import kg.birsom.zerotoexperaandroidtdd.R
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.UiText
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UserUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UsersUiState
 
@@ -34,6 +36,6 @@ object TestUiData {
     )
 
     val usersError = UsersUiState.Error(
-        message = "No internet connection"
+        message = UiText.Res(R.string.users_error_no_internet)
     )
 }
