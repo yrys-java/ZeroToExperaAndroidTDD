@@ -2,6 +2,8 @@ package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.test_
 
 object UserDetailsScreenTags {
 
+    const val SURFACE_DETAILS_SCREEN = "surface_details_screen"
+
     const val BUTTON_DETAILS_BACK = "button_details_back"
 
     const val TEXT_DETAILS_NAME = "text_details_name"
@@ -12,6 +14,7 @@ object UserDetailsScreenTags {
     const val TEXT_DETAILS_ADDRESS = "text_details_address"
     const val TEXT_DETAILS_COMPANY = "text_details_company"
 
-    const val BOX_DETAILS_LOADING = "box_details_loading"
     const val CARD_DETAILS_ERROR = "card_details_error"
+    const val TEXT_DETAILS_ERROR_TITLE = "text_details_error_title"
+    const val TEXT_DETAILS_ERROR_MESSAGE = "text_details_error_message"
 }

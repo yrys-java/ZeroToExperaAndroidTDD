@@ -2,11 +2,11 @@ package kg.birsom.zerotoexperaandroidtdd
 
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import junit.framework.TestCase.assertEquals
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.screen.UserDetailsScreen
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUiState
 import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,24 +20,14 @@ class UserDetailsScreenUiTest {
     private val detailsPage = UserDetailsPage(composeTestRule)
 
     @Test
-    fun shows_user_details_content_without_loading_and_error() {
+    fun shows_user_details_content_without_error() {
         composeTestRule.setContent {
             ZeroToExperaAndroidTDDTheme {
                 UserDetailsScreen(
                     uiState = UserDetailsUiState.Content(
-                        user = UserDetailsUi(
-                            id = 1,
-                            name = "Leanne Graham",
-                            username = "Bret",
-                            email = "Sincere@april.biz",
-                            phone = "1-770-736-8031 x56442",
-                            website = "hildegard.org",
-                            address = "Kulas Light, Apt. 556, Gwenborough, 92998-3874",
-                            company = "Romaguera-Crona"
-                        )
+                        user = leanne()
                     ),
-                    onBackClick = {},
-                    onRetryClick = {}
+                    onBackClick = {}
                 )
             }
         }
@@ -51,7 +41,6 @@ class UserDetailsScreenUiTest {
             address = "Kulas Light, Apt. 556, Gwenborough, 92998-3874",
             company = "Romaguera-Crona"
         )
-        detailsPage.assertLoadingDoesNotExist()
         detailsPage.assertErrorDoesNotExist()
     }
 
@@ -63,21 +52,11 @@ class UserDetailsScreenUiTest {
             ZeroToExperaAndroidTDDTheme {
                 UserDetailsScreen(
                     uiState = UserDetailsUiState.Content(
-                        user = UserDetailsUi(
-                            id = 1,
-                            name = "Leanne Graham",
-                            username = "Bret",
-                            email = "Sincere@april.biz",
-                            phone = "1-770-736-8031 x56442",
-                            website = "hildegard.org",
-                            address = "Kulas Light, Apt. 556, Gwenborough, 92998-3874",
-                            company = "Romaguera-Crona"
-                        )
+                        user = leanne()
                     ),
                     onBackClick = {
                         backClickedCount++
-                    },
-                    onRetryClick = {}
+                    }
                 )
             }
         }
@@ -88,4 +67,35 @@ class UserDetailsScreenUiTest {
 
         assertEquals(1, backClickedCount)
     }
+
+    @Test
+    fun shows_not_found_error_without_content() {
+        composeTestRule.setContent {
+            ZeroToExperaAndroidTDDTheme {
+                UserDetailsScreen(
+                    uiState = UserDetailsUiState.Error(
+                        message = "User not found"
+                    ),
+                    onBackClick = {},
+                )
+            }
+        }
+
+        detailsPage.assertNotFoundError(
+            title = "Cannot open user",
+            message = "User not found"
+        )
+        detailsPage.assertContentDoesNotExist()
+    }
+
+    private fun leanne() = UserDetailsUi(
+        id = 1,
+        name = "Leanne Graham",
+        username = "Bret",
+        email = "Sincere@april.biz",
+        phone = "1-770-736-8031 x56442",
+        website = "hildegard.org",
+        address = "Kulas Light, Apt. 556, Gwenborough, 92998-3874",
+        company = "Romaguera-Crona"
+    )
 }

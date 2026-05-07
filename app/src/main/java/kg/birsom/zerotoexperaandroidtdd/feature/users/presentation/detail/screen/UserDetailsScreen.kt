@@ -17,7 +17,6 @@ import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
 fun UserDetailsScreen(
     uiState: UserDetailsUiState,
     onBackClick: () -> Unit,
-    onRetryClick: () -> Unit
 ) {
     when (uiState) {
         is UserDetailsUiState.Content -> UserDetailsContent(
@@ -82,7 +81,6 @@ private fun UserDetailsScreenContentPreview() {
         UserDetailsScreen(
             uiState = UserDetailsTestUiData.detailsContent,
             onBackClick = {},
-            onRetryClick = {}
         )
     }
 }

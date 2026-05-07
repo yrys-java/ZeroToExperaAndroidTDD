@@ -20,6 +20,9 @@ class UserDetailsPage(
         address: String,
         company: String
     ) {
+        composeTestRule.onNodeWithTag(UserDetailsScreenTags.SURFACE_DETAILS_SCREEN)
+            .assertIsDisplayed()
+
         composeTestRule.onNodeWithTag(UserDetailsScreenTags.BUTTON_DETAILS_BACK)
             .assertIsDisplayed()
 
@@ -59,8 +62,32 @@ class UserDetailsPage(
         ).assertTextEquals(company)
     }
 
-    fun assertLoadingDoesNotExist() {
-        composeTestRule.onNodeWithTag(UserDetailsScreenTags.BOX_DETAILS_LOADING)
+    fun assertNotFoundError(
+        title: String,
+        message: String
+    ) {
+        composeTestRule.onNodeWithTag(UserDetailsScreenTags.SURFACE_DETAILS_SCREEN)
+            .assertIsDisplayed()
+
+        composeTestRule.onNodeWithTag(UserDetailsScreenTags.BUTTON_DETAILS_BACK)
+            .assertIsDisplayed()
+
+        composeTestRule.onNodeWithTag(UserDetailsScreenTags.CARD_DETAILS_ERROR)
+            .assertIsDisplayed()
+
+        composeTestRule.onNodeWithTag(
+            testTag = UserDetailsScreenTags.TEXT_DETAILS_ERROR_TITLE,
+            useUnmergedTree = true
+        ).assertTextEquals(title)
+
+        composeTestRule.onNodeWithTag(
+            testTag = UserDetailsScreenTags.TEXT_DETAILS_ERROR_MESSAGE,
+            useUnmergedTree = true
+        ).assertTextEquals(message)
+    }
+
+    fun assertContentDoesNotExist() {
+        composeTestRule.onNodeWithTag(UserDetailsScreenTags.TEXT_DETAILS_NAME)
             .assertDoesNotExist()
     }
 
@@ -72,6 +99,5 @@ class UserDetailsPage(
     fun back() {
         composeTestRule.onNodeWithTag(UserDetailsScreenTags.BUTTON_DETAILS_BACK)
             .performClick()
-
     }
 }
