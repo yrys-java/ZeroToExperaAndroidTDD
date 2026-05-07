@@ -24,8 +24,23 @@ class UsersViewModel(
     val uiState: StateFlow<UsersUiState> = mutableUiState.asStateFlow()
 
     suspend fun loadUsers() {
-        updateState(repository.getUsers())
+        updateState(repository.getUsers(forceUpdate = false))
         savedStateHandle[USERS_LOADED_KEY] = true
+    }
+
+    suspend fun forceUpdate() {
+        val previousState = mutableUiState.value
+        val result = repository.getUsers(forceUpdate = true)
+
+        if (result is UsersResult.Error && previousState is UsersUiState.Content) {
+            mutableUiState.value = previousState.copy(
+                offline = true,
+                message = result.error.message()
+            )
+            return
+        }
+
+        updateState(result)
     }
 
     suspend fun restoreUsers() {
