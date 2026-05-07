@@ -237,6 +237,42 @@ class UsersViewModelTest {
         }
     }
 
+    @Test
+    fun keeps_current_content_when_force_update_returns_error() = runBlocking {
+        val repository = FakeUsersRepository(
+            usersResults = mutableListOf(
+                UsersResult.Cached(
+                    users = listOf(
+                        user(id = 1, name = "Cached Leanne")
+                    )
+                ),
+                UsersResult.Error(UsersError.Forbidden)
+            )
+        )
+        val viewModel = UsersViewModel(
+            savedStateHandle = SavedStateHandle(),
+            repository = repository
+        )
+
+        viewModel.loadUsers()
+        viewModel.forceUpdate()
+
+        assertEquals(
+            UsersUiState.Content(
+                users = listOf(
+                    UserUi(id = 1, name = "Cached Leanne", email = "user1@example.com")
+                ),
+                offline = true,
+                message = UiText.Res(R.string.users_error_forbidden)
+            ),
+            viewModel.uiState.value
+        )
+        assertEquals(
+            listOf(false, true),
+            repository.forceUpdateValues
+        )
+    }
+
     private class FakeUsersRepository(
         usersResult: UsersResult = UsersResult.Error(UsersError.NoInternet),
         private val cachedUsersResult: UsersResult = UsersResult.Error(UsersError.NoInternet),
@@ -245,9 +281,11 @@ class UsersViewModelTest {
 
         var getUsersCalledCount = 0
         var getCachedUsersCalledCount = 0
+        val forceUpdateValues = mutableListOf<Boolean>()
 
         override suspend fun getUsers(forceUpdate: Boolean): UsersResult {
             getUsersCalledCount++
+            forceUpdateValues.add(forceUpdate)
             return usersResults.removeFirst()
         }
 
