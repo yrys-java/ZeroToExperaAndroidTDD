@@ -52,28 +52,40 @@ class UsersRepositoryTest {
 
     @Test
     fun returns_cached_users_when_api_fails_and_cache_exists() = runBlocking {
-        val api = FakeUserApi(
-            error = IllegalStateException("No internet")
+        val scenarios = listOf(
+            UnknownHostException(),
+            ServerException.Unauthorized,
+            ServerException.Forbidden,
+            ServerException.NotFound,
+            ServerException.TooManyRequests,
+            ServerException.InternalServerError,
+            ServerException.BadGateway,
+            ServerException.ServiceUnavailable,
+            ServerException.EmptyResponse,
+            ServerException.Unknown
         )
-        val dao = FakeUserDao(
-            cachedUsers = listOf(
-                userEntity(id = 1, name = "Cached Leanne"),
-                userEntity(id = 2, name = "Cached Ervin")
+
+        scenarios.forEach { exception ->
+            val api = FakeUserApi(error = exception)
+            val dao = FakeUserDao(
+                cachedUsers = listOf(
+                    userEntity(id = 1, name = "Cached Leanne"),
+                    userEntity(id = 2, name = "Cached Ervin")
+                )
             )
-        )
-        val repository: UsersRepository = UsersRepositoryImpl(
-            api = api,
-            dao = dao
-        )
+            val repository: UsersRepository = UsersRepositoryImpl(
+                api = api,
+                dao = dao
+            )
 
-        val result = repository.getUsers() as UsersResult.Cached
-        val users = result.users
+            val result = repository.getUsers() as UsersResult.Cached
 
-        assertEquals(2, users.size)
-        assertEquals("Cached Leanne", users[0].name)
-        assertEquals("Cached Ervin", users[1].name)
+            assertEquals(1, api.getUsersCalledCount)
+            assertEquals(2, result.users.size)
+            assertEquals("Cached Leanne", result.users[0].name)
+            assertEquals("Cached Ervin", result.users[1].name)
+        }
     }
-
     @Test
     fun returns_error_when_api_fails_and_cache_is_empty() = runBlocking {
         val api = FakeUserApi(
