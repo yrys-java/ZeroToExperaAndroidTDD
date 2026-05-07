@@ -2,6 +2,7 @@ package kg.birsom.zerotoexperaandroidtdd
 
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import junit.framework.TestCase.assertEquals
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.screen.UserDetailsScreen
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUiState
@@ -52,5 +53,39 @@ class UserDetailsScreenUiTest {
         )
         detailsPage.assertLoadingDoesNotExist()
         detailsPage.assertErrorDoesNotExist()
+    }
+
+    @Test
+    fun clicks_back_button_once() {
+        var backClickedCount = 0
+
+        composeTestRule.setContent {
+            ZeroToExperaAndroidTDDTheme {
+                UserDetailsScreen(
+                    uiState = UserDetailsUiState.Content(
+                        user = UserDetailsUi(
+                            id = 1,
+                            name = "Leanne Graham",
+                            username = "Bret",
+                            email = "Sincere@april.biz",
+                            phone = "1-770-736-8031 x56442",
+                            website = "hildegard.org",
+                            address = "Kulas Light, Apt. 556, Gwenborough, 92998-3874",
+                            company = "Romaguera-Crona"
+                        )
+                    ),
+                    onBackClick = {
+                        backClickedCount++
+                    },
+                    onRetryClick = {}
+                )
+            }
+        }
+
+        assertEquals(0, backClickedCount)
+
+        detailsPage.back()
+
+        assertEquals(1, backClickedCount)
     }
 }

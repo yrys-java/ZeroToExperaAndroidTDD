@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.test_data.UserDetailsScreenTags
 
 class UserDetailsPage(
@@ -66,5 +67,11 @@ class UserDetailsPage(
     fun assertErrorDoesNotExist() {
         composeTestRule.onNodeWithTag(UserDetailsScreenTags.CARD_DETAILS_ERROR)
             .assertDoesNotExist()
+    }
+
+    fun back() {
+        composeTestRule.onNodeWithTag(UserDetailsScreenTags.BUTTON_DETAILS_BACK)
+            .performClick()
+
     }
 }
