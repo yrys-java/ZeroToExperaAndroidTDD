@@ -208,6 +208,35 @@ class UsersViewModelTest {
         )
     }
 
+    @Test
+    fun shows_proper_error_messages_when_repository_returns_users_error() = runBlocking {
+        val scenarios = listOf(
+            UsersError.NoInternet to R.string.users_error_no_internet,
+            UsersError.Unauthorized to R.string.users_error_unauthorized,
+            UsersError.Forbidden to R.string.users_error_forbidden,
+            UsersError.NotFound to R.string.users_error_not_found,
+            UsersError.ServerUnavailable to R.string.users_error_server_unavailable,
+            UsersError.EmptyResponse to R.string.users_error_empty_response,
+            UsersError.Unknown to R.string.users_error_unknown
+        )
+
+        scenarios.forEach { (error, messageRes) ->
+            val viewModel = UsersViewModel(
+                savedStateHandle = SavedStateHandle(),
+                repository = FakeUsersRepository(
+                    usersResult = UsersResult.Error(error)
+                )
+            )
+
+            viewModel.loadUsers()
+
+            assertEquals(
+                UsersUiState.Error(message = UiText.Res(messageRes)),
+                viewModel.uiState.value
+            )
+        }
+    }
+
     private class FakeUsersRepository(
         usersResult: UsersResult = UsersResult.Error(UsersError.NoInternet),
         private val cachedUsersResult: UsersResult = UsersResult.Error(UsersError.NoInternet),
