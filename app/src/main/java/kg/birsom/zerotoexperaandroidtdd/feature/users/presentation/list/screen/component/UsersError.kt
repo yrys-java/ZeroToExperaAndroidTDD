@@ -18,8 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.TestUiData
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
+import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
 fun UsersError(
@@ -43,9 +47,21 @@ fun UsersError(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
+                    text = "Something went wrong",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF101828),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.testTag(UsersScreenTags.TEXT_USERS_ERROR_TITLE)
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
                     text = message,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF667085),
+                    textAlign = TextAlign.Center,
                     modifier = Modifier.testTag(UsersScreenTags.TEXT_USERS_ERROR_MESSAGE)
                 )
 
@@ -59,5 +75,16 @@ fun UsersError(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UsersErrorPreview() {
+    ZeroToExperaAndroidTDDTheme {
+        UsersError(
+            message = TestUiData.usersError.message,
+            onRetryClick = {}
+        )
     }
 }
