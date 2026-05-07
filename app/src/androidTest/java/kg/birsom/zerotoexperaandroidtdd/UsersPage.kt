@@ -95,4 +95,9 @@ class UsersPage(
         composeTestRule.onNodeWithTag(UsersScreenTags.CARD_USERS_ERROR)
             .assertDoesNotExist()
     }
+
+    fun clickUserAt(position: Int) {
+        composeTestRule.onNodeWithTag(UsersScreenTags.cardUserItem(position))
+            .performClick()
+    }
 }

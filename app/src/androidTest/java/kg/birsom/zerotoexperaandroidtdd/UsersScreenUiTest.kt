@@ -1,6 +1,6 @@
 package kg.birsom.zerotoexperaandroidtdd
 
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import junit.framework.TestCase.assertEquals
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.UsersScreen
@@ -192,5 +192,42 @@ class UsersScreenUiTest {
         usersPage.assertOfflineBanner(message = "Offline mode: cached data")
         usersPage.assertLoadingDoesNotExist()
         usersPage.assertErrorDoesNotExist()
+    }
+
+    @Test
+    fun clicks_user_item_with_correct_user_id() {
+        var clickedUserId: Int? = null
+
+        composeTestRule.setContent {
+            ZeroToExperaAndroidTDDTheme {
+                UsersScreen(
+                    uiState = UsersUiState.Content(
+                        users = listOf(
+                            UserUi(
+                                id = 1,
+                                name = "Leanne Graham",
+                                email = "Sincere@april.biz"
+                            ),
+                            UserUi(
+                                id = 2,
+                                name = "Ervin Howell",
+                                email = "Shanna@melissa.tv"
+                            )
+                        ),
+                        offline = false
+                    ),
+                    onRetryClick = {},
+                    onUserClick = { userId ->
+                        clickedUserId = userId
+                    }
+                )
+            }
+        }
+
+        assertEquals(null, clickedUserId)
+
+        usersPage.clickUserAt(position = 1)
+
+        assertEquals(2, clickedUserId)
     }
 }
