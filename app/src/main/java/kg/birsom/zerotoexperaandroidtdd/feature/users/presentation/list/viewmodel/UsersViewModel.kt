@@ -61,7 +61,12 @@ class UsersViewModel(
     private fun UsersError.message(): UiText {
         return when (this) {
             UsersError.NoInternet -> UiText.Res(R.string.users_error_no_internet)
-            else ->  UiText.Res(R.string.users_error_no_internet)
+            UsersError.Unauthorized -> UiText.Res(R.string.users_error_unauthorized)
+            UsersError.Forbidden -> UiText.Res(R.string.users_error_forbidden)
+            UsersError.NotFound -> UiText.Res(R.string.users_error_not_found)
+            UsersError.ServerUnavailable -> UiText.Res(R.string.users_error_server_unavailable)
+            UsersError.EmptyResponse -> UiText.Res(R.string.users_error_empty_response)
+            UsersError.Unknown -> UiText.Res(R.string.users_error_unknown)
         }
     }
 }

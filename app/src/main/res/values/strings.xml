@@ -24,4 +24,13 @@
     <string name="user_details_label_name">Name</string>
     <string name="user_details_error_title">Cannot open user</string>
     <string name="user_details_error_not_found">User not found</string>
+
+    <string name="users_error_unauthorized">Unauthorized request</string>
+    <string name="users_error_forbidden">Access is forbidden</string>
+    <string name="users_error_not_found">Users were not found</string>
+    <string name="users_error_server_unavailable">Server is unavailable. Please try again later</string>
+    <string name="users_error_empty_response">Server returned empty response</string>
+    <string name="users_error_unknown">Something went wrong. Please try again later</string>
+
+
 </resources>

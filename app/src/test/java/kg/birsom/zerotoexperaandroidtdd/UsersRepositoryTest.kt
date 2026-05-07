@@ -89,7 +89,7 @@ class UsersRepositoryTest {
     @Test
     fun returns_error_when_api_fails_and_cache_is_empty() = runBlocking {
         val api = FakeUserApi(
-            error = IllegalStateException("No internet")
+            error = UnknownHostException("No internet")
         )
         val dao = FakeUserDao()
         val repository: UsersRepository = UsersRepositoryImpl(
@@ -101,6 +101,25 @@ class UsersRepositoryTest {
 
         assertEquals(
             UsersResult.Error(UsersError.NoInternet),
+            result
+        )
+    }
+
+    @Test
+    fun returns_unknown_when_api_fails_with_unexpected_error_and_cache_is_empty() = runBlocking {
+        val api = FakeUserApi(
+            error = IllegalStateException("Broken response")
+        )
+        val dao = FakeUserDao()
+        val repository: UsersRepository = UsersRepositoryImpl(
+            api = api,
+            dao = dao
+        )
+
+        val result = repository.getUsers()
+
+        assertEquals(
+            UsersResult.Error(UsersError.Unknown),
             result
         )
     }
