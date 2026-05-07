@@ -1,5 +1,6 @@
 package kg.birsom.zerotoexperaandroidtdd.feature.users.data.repository
 
+import kg.birsom.zerotoexperaandroidtdd.core.network.NetworkErrorHandler
 import kg.birsom.zerotoexperaandroidtdd.core.network.manager.NetworkConnectivityService
 import kg.birsom.zerotoexperaandroidtdd.core.network.manager.NetworkStatus
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.local.dao.UserDao
@@ -20,15 +21,17 @@ class UsersRepositoryImpl(
 
     override suspend fun getUsers(): UsersResult {
         if (networkConnectivityService?.currentStatus() == NetworkStatus.Disconnected) {
-            return getCachedUsers()
+            return getCachedUsers(fallbackError = UsersError.NoInternet)
         }
 
         return try {
             val users = api.getUsers().map { it.toDomain() }
             dao.insertUsers(users.map { it.toEntity() })
             UsersResult.Fresh(users)
-        } catch (_: Exception) {
-            getCachedUsers()
+        } catch (exception: Exception) {
+            getCachedUsers(
+                fallbackError = NetworkErrorHandler.handle(exception)
+            )
         }
     }
 
@@ -43,12 +46,16 @@ class UsersRepositoryImpl(
     }
 
     override suspend fun getCachedUsers(): UsersResult {
+        return getCachedUsers(fallbackError = UsersError.NoInternet)
+    }
+
+    private suspend fun getCachedUsers(fallbackError: UsersError): UsersResult {
         val cachedUsers = dao.getUsers().map { it.toDomain() }
 
         return if (cachedUsers.isNotEmpty()) {
             UsersResult.Cached(cachedUsers)
         } else {
-            UsersResult.Error(UsersError.NoInternet)
+            UsersResult.Error(fallbackError)
         }
     }
 }
