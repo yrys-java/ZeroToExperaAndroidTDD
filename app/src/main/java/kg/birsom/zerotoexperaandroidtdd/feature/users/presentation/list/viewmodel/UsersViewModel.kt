@@ -61,6 +61,7 @@ class UsersViewModel(
     private fun UsersError.message(): UiText {
         return when (this) {
             UsersError.NoInternet -> UiText.Res(R.string.users_error_no_internet)
+            else ->  UiText.Res(R.string.users_error_no_internet)
         }
     }
 }

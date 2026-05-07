@@ -1,5 +1,6 @@
 package kg.birsom.zerotoexperaandroidtdd
 
+import kg.birsom.zerotoexperaandroidtdd.core.network.NetworkErrorHandler
 import kg.birsom.zerotoexperaandroidtdd.core.network.exception.ServerException
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersError
 import org.junit.Assert.assertEquals
