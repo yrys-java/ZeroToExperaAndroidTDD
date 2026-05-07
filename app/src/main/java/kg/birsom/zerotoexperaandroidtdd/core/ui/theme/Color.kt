@@ -1,4 +1,4 @@
-package kg.birsom.zerotoexperaandroidtdd.ui.theme
+package kg.birsom.zerotoexperaandroidtdd.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

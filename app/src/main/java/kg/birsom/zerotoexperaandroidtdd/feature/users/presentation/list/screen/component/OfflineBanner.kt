@@ -18,10 +18,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppBackground
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppOfflineContainer
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppOfflineText
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppBackground
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppOfflineContainer
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppOfflineText
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
 fun OfflineBanner() {

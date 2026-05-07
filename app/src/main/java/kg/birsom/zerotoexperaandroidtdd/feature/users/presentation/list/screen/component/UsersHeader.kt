@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.component.UsersTopBar
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppBrand
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppBrandContainer
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppBrand
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppBrandContainer
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
 fun UsersHeader(usersCount: Int) {

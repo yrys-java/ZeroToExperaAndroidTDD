@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UserUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.TestUiData
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
 fun UsersContent(

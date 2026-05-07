@@ -15,8 +15,8 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.screen
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUiState
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.test_data.UserDetailsScreenTags
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.test_data.UserDetailsTestUiData
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppBackground
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppBackground
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
 fun UserDetailsScreen(

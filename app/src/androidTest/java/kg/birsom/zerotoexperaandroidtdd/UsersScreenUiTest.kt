@@ -8,7 +8,7 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.U
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.UsersScreen
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UserUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UsersUiState
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ZeroToExperaAndroidTDDTheme
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

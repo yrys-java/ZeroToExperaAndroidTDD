@@ -26,6 +26,10 @@ class UserDetailsViewModel(
     suspend fun loadUser() {
         val userId = savedStateHandle.get<Int>(USER_ID_KEY) ?: return showNotFound()
 
+        loadUser(userId)
+    }
+
+    suspend fun loadUser(userId: Int) {
         mutableUiState.value = when (val result = repository.getUser(userId)) {
             is UserResult.Success -> UserDetailsUiState.Content(
                 user = result.user.toDetailsUi()

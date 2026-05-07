@@ -26,10 +26,10 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.U
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.asString
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.TestUiData
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppCardBackground
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppTextPrimary
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.AppTextSecondary
-import kg.birsom.zerotoexperaandroidtdd.ui.theme.ZeroToExperaAndroidTDDTheme
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppCardBackground
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppTextPrimary
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppTextSecondary
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ZeroToExperaAndroidTDDTheme
 
 @Composable
 fun UsersError(
