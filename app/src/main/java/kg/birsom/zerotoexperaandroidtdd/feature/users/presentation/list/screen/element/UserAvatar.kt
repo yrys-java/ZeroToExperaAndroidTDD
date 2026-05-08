@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ThemePreviews
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
@@ -55,7 +55,7 @@ private fun String.initials(): String {
         .ifEmpty { "?" }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UserAvatarPreview() {
     ZeroToExperaAndroidTDDTheme {
@@ -66,7 +66,7 @@ private fun UserAvatarPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun NameUserAvatarPreview() {
     ZeroToExperaAndroidTDDTheme {
@@ -77,7 +77,7 @@ private fun NameUserAvatarPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun EmptyUserAvatarPreview() {
     ZeroToExperaAndroidTDDTheme {

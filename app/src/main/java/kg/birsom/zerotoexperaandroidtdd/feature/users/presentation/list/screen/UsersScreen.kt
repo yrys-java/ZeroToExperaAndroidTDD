@@ -1,12 +1,14 @@
 package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.tooling.preview.Preview
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ThemePreviews
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.component.UsersContent
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.component.UsersError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.component.UsersLoading
@@ -29,32 +31,38 @@ fun UsersScreen(
             .testTag(UsersScreenTags.SURFACE_USERS_SCREEN),
         color = AppBackground
     ) {
-        when (uiState) {
-            is UsersUiState.Content -> PullToRefreshBox(
-                isRefreshing = false,
-                onRefresh = onRetryClick,
-                modifier = Modifier.testTag(UsersScreenTags.BOX_USERS_PULL_REFRESH)
-            ) {
-                UsersContent(
-                    users = uiState.users,
-                    offline = uiState.offline,
-                    onUserClick = onUserClick
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding()
+        ) {
+            when (uiState) {
+                is UsersUiState.Content -> PullToRefreshBox(
+                    isRefreshing = false,
+                    onRefresh = onRetryClick,
+                    modifier = Modifier.testTag(UsersScreenTags.BOX_USERS_PULL_REFRESH)
+                ) {
+                    UsersContent(
+                        users = uiState.users,
+                        offline = uiState.offline,
+                        onUserClick = onUserClick
+                    )
+                }
+
+                is UsersUiState.Loading -> UsersLoading()
+
+                is UsersUiState.Error -> UsersError(
+                    message = uiState.message,
+                    showBackButton = uiState.cachedUsers.isNotEmpty(),
+                    onRetryClick = onRetryClick,
+                    onBackClick = onBackClick
                 )
             }
-
-            is UsersUiState.Loading -> UsersLoading()
-
-            is UsersUiState.Error -> UsersError(
-                message = uiState.message,
-                showBackButton = uiState.cachedUsers.isNotEmpty(),
-                onRetryClick = onRetryClick,
-                onBackClick = onBackClick
-            )
         }
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UsersScreenContentPreview() {
     ZeroToExperaAndroidTDDTheme {
@@ -67,7 +75,7 @@ private fun UsersScreenContentPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UsersScreenLoadingPreview() {
     ZeroToExperaAndroidTDDTheme {
@@ -80,7 +88,7 @@ private fun UsersScreenLoadingPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UsersScreenErrorPreview() {
     ZeroToExperaAndroidTDDTheme {
@@ -93,7 +101,7 @@ private fun UsersScreenErrorPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UsersScreenOfflinePreview() {
     ZeroToExperaAndroidTDDTheme {
@@ -106,7 +114,7 @@ private fun UsersScreenOfflinePreview() {
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UsersScreenCachedErrorPreview() {
     ZeroToExperaAndroidTDDTheme {

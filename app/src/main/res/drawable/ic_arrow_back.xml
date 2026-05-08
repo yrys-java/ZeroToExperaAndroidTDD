@@ -14,14 +14,11 @@
   ~ limitations under the License.
   -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="800dp"
-    android:height="800dp"
-    android:viewportWidth="1024"
-    android:viewportHeight="1024">
+    android:width="44dp"
+    android:height="44dp"
+    android:viewportWidth="44"
+    android:viewportHeight="44">
   <path
-      android:pathData="M224,480h640a32,32 0,1 1,0 64H224a32,32 0,0 1,0 -64z"
-      android:fillColor="#000000"/>
-  <path
-      android:pathData="m237.2,512 l265.4,265.3a32,32 0,0 1,-45.3 45.3l-288,-288a32,32 0,0 1,0 -45.3l288,-288a32,32 0,1 1,45.3 45.3L237.2,512z"
-      android:fillColor="#000000"/>
+      android:pathData="M23.707,29.293L16.414,22L23.707,14.707C24.098,14.317 24.098,13.683 23.707,13.293C23.317,12.902 22.683,12.902 22.293,13.293L14.293,21.293C13.902,21.683 13.902,22.317 14.293,22.707L22.293,30.707C22.683,31.098 23.317,31.098 23.707,30.707C24.098,30.317 24.098,29.683 23.707,29.293Z"
+      android:fillColor="#ffffff"/>
 </vector>

@@ -1,5 +1,6 @@
 package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,7 +22,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ThemePreviews
 import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.UiText
@@ -29,6 +30,7 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.a
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.TestUiData
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppCardBackground
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppCardBorder
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppTextPrimary
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppTextSecondary
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ZeroToExperaAndroidTDDTheme
@@ -50,7 +52,8 @@ fun UsersError(
             modifier = Modifier.testTag(UsersScreenTags.CARD_USERS_ERROR),
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(containerColor = AppCardBackground),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+            border = BorderStroke(1.dp, AppCardBorder)
         ) {
             Column(
                 modifier = Modifier.padding(24.dp),
@@ -101,7 +104,7 @@ fun UsersError(
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UsersErrorPreview() {
     ZeroToExperaAndroidTDDTheme {
@@ -114,7 +117,7 @@ private fun UsersErrorPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UsersErrorPreviewWithCache() {
     ZeroToExperaAndroidTDDTheme {

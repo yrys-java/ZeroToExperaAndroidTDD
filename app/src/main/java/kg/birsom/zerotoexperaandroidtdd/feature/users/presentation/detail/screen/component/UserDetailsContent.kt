@@ -9,7 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ThemePreviews
 import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUi
@@ -76,7 +76,7 @@ fun UserDetailsContent(
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UserDetailsContentPreview() {
     ZeroToExperaAndroidTDDTheme {

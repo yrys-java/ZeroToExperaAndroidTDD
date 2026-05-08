@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.tooling.preview.Preview
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ThemePreviews
 import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UserUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.TestUiData
@@ -56,7 +56,7 @@ fun UsersContent(
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UsersContentPreview() {
     ZeroToExperaAndroidTDDTheme {
@@ -68,7 +68,7 @@ private fun UsersContentPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UsersOfflineContentPreview() {
     ZeroToExperaAndroidTDDTheme {

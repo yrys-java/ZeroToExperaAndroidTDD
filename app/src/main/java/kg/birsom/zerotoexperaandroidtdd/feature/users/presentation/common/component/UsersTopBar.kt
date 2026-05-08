@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ThemePreviews
 import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppCardBackground
@@ -41,7 +41,7 @@ fun UsersTopBar(
         modifier = modifier
             .fillMaxWidth()
             .background(AppCardBackground)
-            .padding(horizontal = 20.dp, vertical = 4.dp)
+            .padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -55,7 +55,6 @@ fun UsersTopBar(
                     Icon(
                         painter = painterResource(R.drawable.ic_arrow_back),
                         contentDescription = stringResource(R.string.content_description_back),
-                        tint = AppTextPrimary
                     )
                 }
             }
@@ -83,7 +82,7 @@ fun UsersTopBar(
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UsersTopBarPreview() {
     ZeroToExperaAndroidTDDTheme {
@@ -94,7 +93,7 @@ private fun UsersTopBarPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UsersTopBarBackPreview() {
     ZeroToExperaAndroidTDDTheme {

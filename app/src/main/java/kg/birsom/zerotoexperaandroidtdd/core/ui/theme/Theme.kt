@@ -11,21 +11,41 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = DarkBrand,
+    onPrimary = DarkOnBrand,
+    primaryContainer = DarkBrandContainer,
+    onPrimaryContainer = DarkBrand,
+    background = DarkBackground,
+    onBackground = DarkTextPrimary,
+    surface = DarkCardBackground,
+    onSurface = DarkTextPrimary,
+    onSurfaceVariant = DarkTextSecondary,
+    outline = DarkCardBorder,
+    outlineVariant = DarkMutedIcon,
+    tertiaryContainer = DarkOfflineContainer,
+    onTertiaryContainer = DarkOfflineText
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = LightBrand,
+    onPrimary = LightOnBrand,
+    primaryContainer = LightBrandContainer,
+    onPrimaryContainer = LightBrand,
+    background = LightBackground,
+    onBackground = LightTextPrimary,
+    surface = LightCardBackground,
+    onSurface = LightTextPrimary,
+    onSurfaceVariant = LightTextSecondary,
+    outline = LightCardBorder,
+    outlineVariant = LightMutedIcon,
+    tertiaryContainer = LightOfflineContainer,
+    onTertiaryContainer = LightOfflineText
 )
 
 @Composable
 fun ZeroToExperaAndroidTDDTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
+    // Dynamic color is available on Android 12+ and can be enabled by callers.
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {

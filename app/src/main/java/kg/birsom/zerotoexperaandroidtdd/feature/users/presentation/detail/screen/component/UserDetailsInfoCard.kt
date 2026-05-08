@@ -1,5 +1,6 @@
 package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.screen.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,12 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ThemePreviews
 import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.test_data.UserDetailsScreenTags
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.test_data.UserDetailsTestUiData
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppCardBackground
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppCardBorder
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppTextPrimary
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppTextSecondary
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ZeroToExperaAndroidTDDTheme
@@ -34,7 +36,8 @@ fun UserDetailsInfoCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = AppCardBackground),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+        border = BorderStroke(1.dp, AppCardBorder)
     ) {
         Column(
             modifier = Modifier.padding(18.dp)
@@ -87,7 +90,7 @@ private fun UserDetailsTextRow(
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UserDetailsInfoCardPreview() {
     ZeroToExperaAndroidTDDTheme {

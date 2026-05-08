@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ThemePreviews
 import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppBrand
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppOnBrand
@@ -48,7 +48,7 @@ private fun String.initials(): String {
         .ifEmpty { "?" }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun DetailsAvatarPreview() {
     ZeroToExperaAndroidTDDTheme {
@@ -56,7 +56,7 @@ private fun DetailsAvatarPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun SingleNameDetailsAvatarPreview() {
     ZeroToExperaAndroidTDDTheme {
@@ -64,7 +64,7 @@ private fun SingleNameDetailsAvatarPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun EmptyDetailsAvatarPreview() {
     ZeroToExperaAndroidTDDTheme {

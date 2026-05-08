@@ -2,12 +2,14 @@ package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.scree
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ThemePreviews
 import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.component.UsersTopBar
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.screen.component.UserDetailsContent
@@ -23,37 +25,44 @@ fun UserDetailsScreen(
     uiState: UserDetailsUiState,
     onBackClick: () -> Unit
 ) {
-    Scaffold(
+    Surface(
         modifier = Modifier
             .fillMaxSize()
             .testTag(UserDetailsScreenTags.SURFACE_DETAILS_SCREEN),
-        containerColor = AppBackground,
-        topBar = {
-            UsersTopBar(
-                title = stringResource(R.string.user_details_title),
-                onBackClick = onBackClick,
-                backButtonModifier = Modifier.testTag(UserDetailsScreenTags.BUTTON_DETAILS_BACK)
-            )
-        }
-    ) { innerPadding ->
-        when (uiState) {
-            is UserDetailsUiState.Content -> UserDetailsContent(
-                user = uiState.user,
-                modifier = Modifier.padding(innerPadding)
-            )
+        color = AppBackground
+    ) {
+        Scaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
+            containerColor = AppBackground,
+            topBar = {
+                UsersTopBar(
+                    title = stringResource(R.string.user_details_title),
+                    onBackClick = onBackClick,
+                    backButtonModifier = Modifier.testTag(UserDetailsScreenTags.BUTTON_DETAILS_BACK)
+                )
+            }
+        ) { innerPadding ->
+            when (uiState) {
+                is UserDetailsUiState.Content -> UserDetailsContent(
+                    user = uiState.user,
+                    modifier = Modifier.padding(innerPadding)
+                )
 
-            is UserDetailsUiState.Error -> UserDetailsError(
-                message = uiState.message,
-                modifier = Modifier.padding(innerPadding)
-            )
+                is UserDetailsUiState.Error -> UserDetailsError(
+                    message = uiState.message,
+                    modifier = Modifier.padding(innerPadding)
+                )
 
-            UserDetailsUiState.Loading -> Unit
+                UserDetailsUiState.Loading -> Unit
+            }
         }
     }
 }
 
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UserDetailsScreenErrorPreview() {
     ZeroToExperaAndroidTDDTheme {
@@ -64,7 +73,7 @@ private fun UserDetailsScreenErrorPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UserDetailsScreenContentPreview() {
     ZeroToExperaAndroidTDDTheme {

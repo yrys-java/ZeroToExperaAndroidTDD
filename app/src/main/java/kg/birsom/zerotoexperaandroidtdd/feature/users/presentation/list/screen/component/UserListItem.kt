@@ -1,5 +1,6 @@
 package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +20,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ThemePreviews
 import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.element.UserAvatar
@@ -27,6 +28,7 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.Us
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.TestUiData
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppCardBackground
+import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppCardBorder
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppMutedIcon
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppTextPrimary
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.AppTextSecondary
@@ -45,7 +47,8 @@ fun UserListItem(
             .testTag(UsersScreenTags.cardUserItem(position)),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = AppCardBackground),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+        border = BorderStroke(1.dp, AppCardBorder)
     ) {
         Row(
             modifier = Modifier
@@ -95,7 +98,7 @@ fun UserListItem(
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 private fun UserListItemPreview() {
     ZeroToExperaAndroidTDDTheme {
