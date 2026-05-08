@@ -2,6 +2,7 @@ package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.viewmod
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UsersResult
@@ -10,9 +11,11 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.U
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.mapper.toUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UserUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.state.UsersUiState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 private const val USERS_LOADED_KEY = "USERS_LOADED_KEY"
 
@@ -23,10 +26,33 @@ class UsersViewModel(
 
     private val mutableUiState = MutableStateFlow<UsersUiState>(UsersUiState.Loading)
     val uiState: StateFlow<UsersUiState> = mutableUiState.asStateFlow()
+    private var initialLoadJob: Job? = null
+
+    fun onStarted() {
+        if (initialLoadJob?.isActive == true) return
+
+        initialLoadJob = viewModelScope.launch {
+            loadInitialUsers()
+        }
+    }
+
+    suspend fun loadInitialUsers() {
+        restoreUsers()
+
+        if (mutableUiState.value == UsersUiState.Loading) {
+            loadUsers()
+        }
+    }
 
     suspend fun loadUsers() {
         updateState(repository.getUsers(forceUpdate = false))
         savedStateHandle[USERS_LOADED_KEY] = true
+    }
+
+    fun retryUsers() {
+        viewModelScope.launch {
+            refreshUsers()
+        }
     }
 
     suspend fun refreshUsers() {

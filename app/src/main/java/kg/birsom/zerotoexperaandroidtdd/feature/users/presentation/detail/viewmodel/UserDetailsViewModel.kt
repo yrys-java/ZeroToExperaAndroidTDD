@@ -2,6 +2,7 @@ package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.viewm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UserError
 import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.model.UserResult
@@ -9,9 +10,11 @@ import kg.birsom.zerotoexperaandroidtdd.feature.users.domain.repository.UsersRep
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.text.UiText
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.mapper.toDetailsUi
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.state.UserDetailsUiState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 private const val USER_ID_KEY = "userId"
 
@@ -22,6 +25,14 @@ class UserDetailsViewModel(
 
     private val mutableUiState = MutableStateFlow<UserDetailsUiState>(UserDetailsUiState.Loading)
     val uiState: StateFlow<UserDetailsUiState> = mutableUiState.asStateFlow()
+    private var loadUserJob: Job? = null
+
+    fun showUser(userId: Int) {
+        loadUserJob?.cancel()
+        loadUserJob = viewModelScope.launch {
+            loadUser(userId)
+        }
+    }
 
     suspend fun loadUser() {
         val userId = savedStateHandle.get<Int>(USER_ID_KEY) ?: return showNotFound()
