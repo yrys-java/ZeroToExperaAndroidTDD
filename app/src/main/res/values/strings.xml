@@ -9,6 +9,7 @@
     <string name="users_error_title">Something went wrong</string>
     <string name="users_error_no_internet">No internet connection</string>
     <string name="users_retry">Retry</string>
+    <string name="users_back">Back</string>
     <string name="users_offline_banner">Offline mode: cached data</string>
     <string name="users_item_arrow">›</string>
 

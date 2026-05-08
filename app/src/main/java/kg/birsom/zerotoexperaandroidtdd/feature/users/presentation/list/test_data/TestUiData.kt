@@ -38,4 +38,9 @@ object TestUiData {
     val usersError = UsersUiState.Error(
         message = UiText.Res(R.string.users_error_no_internet)
     )
+
+    val usersErrorWithCache = UsersUiState.Error(
+        message = UiText.Res(R.string.users_error_forbidden),
+        cachedUsers = users
+    )
 }

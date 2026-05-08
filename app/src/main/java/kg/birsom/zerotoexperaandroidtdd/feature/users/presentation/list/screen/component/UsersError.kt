@@ -2,10 +2,12 @@ package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen.
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -34,7 +36,9 @@ import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ZeroToExperaAndroidTDDThem
 @Composable
 fun UsersError(
     message: UiText,
-    onRetryClick: () -> Unit
+    showBackButton: Boolean,
+    onRetryClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -65,7 +69,7 @@ fun UsersError(
 
                 Text(
                     text = message.asString(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = AppTextSecondary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag(UsersScreenTags.TEXT_USERS_ERROR_MESSAGE)
@@ -73,11 +77,24 @@ fun UsersError(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(
-                    onClick = onRetryClick,
-                    modifier = Modifier.testTag(UsersScreenTags.BUTTON_USERS_RETRY)
-                ) {
-                    Text(text = stringResource(R.string.users_retry))
+                Row {
+                    Button(
+                        onClick = onRetryClick,
+                        modifier = Modifier.testTag(UsersScreenTags.BUTTON_USERS_RETRY)
+                    ) {
+                        Text(text = stringResource(R.string.users_retry))
+                    }
+
+                    if (showBackButton) {
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Button(
+                            onClick = onBackClick,
+                            modifier = Modifier.testTag(UsersScreenTags.BUTTON_USERS_BACK)
+                        ) {
+                            Text(text = stringResource(R.string.users_back))
+                        }
+                    }
                 }
             }
         }
@@ -90,7 +107,22 @@ private fun UsersErrorPreview() {
     ZeroToExperaAndroidTDDTheme {
         UsersError(
             message = TestUiData.usersError.message,
-            onRetryClick = {}
+            showBackButton = false,
+            onRetryClick = {},
+            onBackClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UsersErrorPreviewWithCache() {
+    ZeroToExperaAndroidTDDTheme {
+        UsersError(
+            message = TestUiData.usersErrorWithCache.message,
+            showBackButton = true,
+            onRetryClick = {},
+            onBackClick = {}
         )
     }
 }

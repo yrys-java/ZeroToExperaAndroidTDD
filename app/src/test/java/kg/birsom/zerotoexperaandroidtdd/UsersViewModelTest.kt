@@ -95,7 +95,7 @@ class UsersViewModelTest {
     }
 
     @Test
-    fun retry_loads_users_again_after_error() = runBlocking {
+    fun refresh_users_loads_users_again_after_error() = runBlocking {
         val repository = FakeUsersRepository(
             usersResults = mutableListOf(
                 UsersResult.Error(UsersError.NoInternet),
@@ -117,7 +117,7 @@ class UsersViewModelTest {
             viewModel.uiState.value
         )
 
-        viewModel.retry()
+        viewModel.refreshUsers()
 
         assertEquals(
             UsersUiState.Content(
@@ -129,6 +129,37 @@ class UsersViewModelTest {
             viewModel.uiState.value
         )
         assertEquals(2, repository.getUsersCalledCount)
+        assertEquals(
+            listOf(false, true),
+            repository.forceUpdateValues
+        )
+    }
+
+    @Test
+    fun shows_loading_when_refreshing_after_error() = runBlocking {
+        lateinit var viewModel: UsersViewModel
+        val repository = FakeUsersRepository(
+            usersResults = mutableListOf(
+                UsersResult.Error(UsersError.NoInternet),
+                UsersResult.Fresh(
+                    users = listOf(
+                        user(id = 1, name = "Leanne Graham")
+                    )
+                )
+            ),
+            onGetUsers = { forceUpdate ->
+                if (forceUpdate) {
+                    assertEquals(UsersUiState.Loading, viewModel.uiState.value)
+                }
+            }
+        )
+        viewModel = UsersViewModel(
+            savedStateHandle = SavedStateHandle(),
+            repository = repository
+        )
+
+        viewModel.loadUsers()
+        viewModel.refreshUsers()
     }
 
     @Test
@@ -238,7 +269,7 @@ class UsersViewModelTest {
     }
 
     @Test
-    fun keeps_current_content_when_force_update_returns_error() = runBlocking {
+    fun shows_error_with_cached_users_when_refresh_returns_error() = runBlocking {
         val repository = FakeUsersRepository(
             usersResults = mutableListOf(
                 UsersResult.Cached(
@@ -255,15 +286,14 @@ class UsersViewModelTest {
         )
 
         viewModel.loadUsers()
-        viewModel.forceUpdate()
+        viewModel.refreshUsers()
 
         assertEquals(
-            UsersUiState.Content(
-                users = listOf(
+            UsersUiState.Error(
+                message = UiText.Res(R.string.users_error_forbidden),
+                cachedUsers = listOf(
                     UserUi(id = 1, name = "Cached Leanne", email = "user1@example.com")
-                ),
-                offline = true,
-                message = UiText.Res(R.string.users_error_forbidden)
+                )
             ),
             viewModel.uiState.value
         )
@@ -273,10 +303,43 @@ class UsersViewModelTest {
         )
     }
 
+    @Test
+    fun restores_cached_users_from_error() = runBlocking {
+        val repository = FakeUsersRepository(
+            usersResults = mutableListOf(
+                UsersResult.Cached(
+                    users = listOf(
+                        user(id = 1, name = "Cached Leanne")
+                    )
+                ),
+                UsersResult.Error(UsersError.Forbidden)
+            )
+        )
+        val viewModel = UsersViewModel(
+            savedStateHandle = SavedStateHandle(),
+            repository = repository
+        )
+
+        viewModel.loadUsers()
+        viewModel.refreshUsers()
+        viewModel.restoreCachedUsersFromError()
+
+        assertEquals(
+            UsersUiState.Content(
+                users = listOf(
+                    UserUi(id = 1, name = "Cached Leanne", email = "user1@example.com")
+                ),
+                offline = true
+            ),
+            viewModel.uiState.value
+        )
+    }
+
     private class FakeUsersRepository(
         usersResult: UsersResult = UsersResult.Error(UsersError.NoInternet),
         private val cachedUsersResult: UsersResult = UsersResult.Error(UsersError.NoInternet),
-        private val usersResults: MutableList<UsersResult> = mutableListOf(usersResult)
+        private val usersResults: MutableList<UsersResult> = mutableListOf(usersResult),
+        private val onGetUsers: (Boolean) -> Unit = {}
     ) : UsersRepository {
 
         var getUsersCalledCount = 0
@@ -286,6 +349,7 @@ class UsersViewModelTest {
         override suspend fun getUsers(forceUpdate: Boolean): UsersResult {
             getUsersCalledCount++
             forceUpdateValues.add(forceUpdate)
+            onGetUsers(forceUpdate)
             return usersResults.removeFirst()
         }
 

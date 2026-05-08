@@ -42,6 +42,7 @@ class UsersScreenUiTest {
                         offline = false
                     ),
                     onRetryClick = {},
+                    onBackClick = {},
                     onUserClick = {}
                 )
             }
@@ -84,6 +85,7 @@ class UsersScreenUiTest {
                         offline = false
                     ),
                     onRetryClick = {},
+                    onBackClick = {},
                     onUserClick = {}
                 )
             }
@@ -111,6 +113,7 @@ class UsersScreenUiTest {
                         offline = false
                     ),
                     onRetryClick = {},
+                    onBackClick = {},
                     onUserClick = {}
                 )
             }
@@ -129,6 +132,7 @@ class UsersScreenUiTest {
                 UsersScreen(
                     uiState = UsersUiState.Loading,
                     onRetryClick = {},
+                    onBackClick = {},
                     onUserClick = {}
                 )
             }
@@ -151,6 +155,7 @@ class UsersScreenUiTest {
                     onRetryClick = {
                         retryClickedCount++
                     },
+                    onBackClick = {},
                     onUserClick = {}
                 )
             }
@@ -159,10 +164,46 @@ class UsersScreenUiTest {
         usersPage.assertError(message = string(R.string.users_error_no_internet))
         usersPage.assertUserDoesNotExist(position = 0)
         usersPage.assertLoadingDoesNotExist()
+        usersPage.assertBackDoesNotExist()
 
         usersPage.retry()
 
         assertEquals(1, retryClickedCount)
+    }
+
+    @Test
+    fun shows_error_with_back_when_cached_users_exist() {
+        var backClickedCount = 0
+
+        composeTestRule.setContent {
+            ZeroToExperaAndroidTDDTheme {
+                UsersScreen(
+                    uiState = UsersUiState.Error(
+                        message = UiText.Res(R.string.users_error_forbidden),
+                        cachedUsers = listOf(
+                            UserUi(
+                                id = 1,
+                                name = "Cached Leanne",
+                                email = "cached@example.com"
+                            )
+                        )
+                    ),
+                    onRetryClick = {},
+                    onBackClick = {
+                        backClickedCount++
+                    },
+                    onUserClick = {}
+                )
+            }
+        }
+
+        usersPage.assertError(message = string(R.string.users_error_forbidden))
+        usersPage.assertBack()
+        usersPage.assertUserDoesNotExist(position = 0)
+
+        usersPage.back()
+
+        assertEquals(1, backClickedCount)
     }
 
     @Test
@@ -181,6 +222,7 @@ class UsersScreenUiTest {
                         offline = true
                     ),
                     onRetryClick = {},
+                    onBackClick = {},
                     onUserClick = {}
                 )
             }
@@ -194,6 +236,38 @@ class UsersScreenUiTest {
         usersPage.assertOfflineBanner(message = string(R.string.users_offline_banner))
         usersPage.assertLoadingDoesNotExist()
         usersPage.assertErrorDoesNotExist()
+    }
+
+    @Test
+    fun pulls_to_refresh_users() {
+        var refreshClickedCount = 0
+
+        composeTestRule.setContent {
+            ZeroToExperaAndroidTDDTheme {
+                UsersScreen(
+                    uiState = UsersUiState.Content(
+                        users = listOf(
+                            UserUi(
+                                id = 1,
+                                name = "Leanne Graham",
+                                email = "Sincere@april.biz"
+                            )
+                        ),
+                        offline = false
+                    ),
+                    onRetryClick = {
+                        refreshClickedCount++
+                    },
+                    onBackClick = {},
+                    onUserClick = {}
+                )
+            }
+        }
+
+        usersPage.pullToRefresh()
+        composeTestRule.waitForIdle()
+
+        assertEquals(1, refreshClickedCount)
     }
 
     @Test
@@ -219,6 +293,7 @@ class UsersScreenUiTest {
                         offline = false
                     ),
                     onRetryClick = {},
+                    onBackClick = {},
                     onUserClick = { userId ->
                         clickedUserId = userId
                     }

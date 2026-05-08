@@ -2,6 +2,7 @@ package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.screen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -19,6 +20,7 @@ import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ZeroToExperaAndroidTDDThem
 fun UsersScreen(
     uiState: UsersUiState,
     onRetryClick: () -> Unit,
+    onBackClick: () -> Unit,
     onUserClick: (Int) -> Unit
 ) {
     Surface(
@@ -28,17 +30,25 @@ fun UsersScreen(
         color = AppBackground
     ) {
         when (uiState) {
-            is UsersUiState.Content -> UsersContent(
-                users = uiState.users,
-                offline = uiState.offline,
-                onUserClick = onUserClick
-            )
+            is UsersUiState.Content -> PullToRefreshBox(
+                isRefreshing = false,
+                onRefresh = onRetryClick,
+                modifier = Modifier.testTag(UsersScreenTags.BOX_USERS_PULL_REFRESH)
+            ) {
+                UsersContent(
+                    users = uiState.users,
+                    offline = uiState.offline,
+                    onUserClick = onUserClick
+                )
+            }
 
             is UsersUiState.Loading -> UsersLoading()
 
             is UsersUiState.Error -> UsersError(
                 message = uiState.message,
-                onRetryClick = onRetryClick
+                showBackButton = uiState.cachedUsers.isNotEmpty(),
+                onRetryClick = onRetryClick,
+                onBackClick = onBackClick
             )
         }
     }
@@ -51,6 +61,7 @@ private fun UsersScreenContentPreview() {
         UsersScreen(
             uiState = TestUiData.usersContent,
             onRetryClick = {},
+            onBackClick = {},
             onUserClick = {}
         )
     }
@@ -63,6 +74,7 @@ private fun UsersScreenLoadingPreview() {
         UsersScreen(
             uiState = UsersUiState.Loading,
             onRetryClick = {},
+            onBackClick = {},
             onUserClick = {}
         )
     }
@@ -75,6 +87,7 @@ private fun UsersScreenErrorPreview() {
         UsersScreen(
             uiState = TestUiData.usersError,
             onRetryClick = {},
+            onBackClick = {},
             onUserClick = {}
         )
     }
@@ -87,6 +100,20 @@ private fun UsersScreenOfflinePreview() {
         UsersScreen(
             uiState = TestUiData.usersOfflineContent,
             onRetryClick = {},
+            onBackClick = {},
+            onUserClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UsersScreenCachedErrorPreview() {
+    ZeroToExperaAndroidTDDTheme {
+        UsersScreen(
+            uiState = TestUiData.usersErrorWithCache,
+            onRetryClick = {},
+            onBackClick = {},
             onUserClick = {}
         )
     }

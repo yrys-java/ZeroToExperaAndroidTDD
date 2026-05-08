@@ -8,11 +8,11 @@ sealed interface UsersUiState {
 
     data class Content(
         val users: List<UserUi>,
-        val offline: Boolean,
-        val message: UiText? = null
+        val offline: Boolean
     ) : UsersUiState
 
     data class Error(
-        val message: UiText
+        val message: UiText,
+        val cachedUsers: List<UserUi> = emptyList()
     ) : UsersUiState
 }

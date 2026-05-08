@@ -5,6 +5,8 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeDown
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_data.UsersScreenTags
 
 class UsersPage(
@@ -71,9 +73,37 @@ class UsersPage(
         ).assertIsDisplayed()
     }
 
+    fun assertBack() {
+        composeTestRule.onNodeWithTag(
+            testTag = UsersScreenTags.BUTTON_USERS_BACK,
+            useUnmergedTree = true
+        ).assertIsDisplayed()
+    }
+
+    fun assertBackDoesNotExist() {
+        composeTestRule.onNodeWithTag(UsersScreenTags.BUTTON_USERS_BACK)
+            .assertDoesNotExist()
+    }
+
     fun retry() {
         composeTestRule.onNodeWithTag(UsersScreenTags.BUTTON_USERS_RETRY)
             .performClick()
+    }
+
+    fun back() {
+        composeTestRule.onNodeWithTag(UsersScreenTags.BUTTON_USERS_BACK)
+            .performClick()
+    }
+
+    fun pullToRefresh() {
+        composeTestRule.onNodeWithTag(UsersScreenTags.LAZY_COLUMN_USERS)
+            .performTouchInput {
+                swipeDown(
+                    startY = centerY,
+                    endY = bottom,
+                    durationMillis = 1_000
+                )
+            }
     }
 
     fun assertLoadingDoesNotExist() {

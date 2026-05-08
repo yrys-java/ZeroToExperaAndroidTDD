@@ -43,8 +43,11 @@ fun UsersApp() {
                 uiState = uiState,
                 onRetryClick = {
                     coroutineScope.launch {
-                        viewModel.retry()
+                        viewModel.refreshUsers()
                     }
+                },
+                onBackClick = {
+                    viewModel.restoreCachedUsersFromError()
                 },
                 onUserClick = { userId ->
                     navController.navigate(UsersRoutes.userDetails(userId))

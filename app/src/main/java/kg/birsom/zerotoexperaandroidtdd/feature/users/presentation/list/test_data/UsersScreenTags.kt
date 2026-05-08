@@ -3,6 +3,7 @@ package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.list.test_da
 object UsersScreenTags {
 
     const val SURFACE_USERS_SCREEN = "surface_users_screen"
+    const val BOX_USERS_PULL_REFRESH = "box_users_pull_refresh"
     const val COLUMN_USERS_CONTENT = "column_users_content"
     const val LAZY_COLUMN_USERS = "lazy_column_users"
 
@@ -20,6 +21,7 @@ object UsersScreenTags {
     const val TEXT_USERS_ERROR_TITLE = "text_users_error_title"
     const val TEXT_USERS_ERROR_MESSAGE = "text_users_error_message"
     const val BUTTON_USERS_RETRY = "button_users_retry"
+    const val BUTTON_USERS_BACK = "button_users_back"
 
     const val BOX_USERS_OFFLINE_BANNER = "box_users_offline_banner"
     const val TEXT_USERS_OFFLINE_BANNER = "text_users_offline_banner"
