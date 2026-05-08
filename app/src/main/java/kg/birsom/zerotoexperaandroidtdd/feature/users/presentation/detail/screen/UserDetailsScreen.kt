@@ -3,12 +3,14 @@ package kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.detail.scree
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import kg.birsom.zerotoexperaandroidtdd.core.ui.theme.ThemePreviews
 import kg.birsom.zerotoexperaandroidtdd.R
 import kg.birsom.zerotoexperaandroidtdd.feature.users.presentation.common.component.UsersTopBar
@@ -29,7 +31,8 @@ fun UserDetailsScreen(
         modifier = Modifier
             .fillMaxSize()
             .testTag(UserDetailsScreenTags.SURFACE_DETAILS_SCREEN),
-        color = AppBackground
+        color = AppBackground,
+        shape = RoundedCornerShape(28.dp)
     ) {
         Scaffold(
             modifier = Modifier
