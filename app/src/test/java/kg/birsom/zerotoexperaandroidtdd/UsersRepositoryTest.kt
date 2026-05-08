@@ -34,7 +34,7 @@ class UsersRepositoryTest {
             )
         )
         val dao = FakeUserDao()
-        val repository: UsersRepository = UsersRepositoryImpl(
+        val repository: UsersRepository = createRepository(
             api = api,
             dao = dao
         )
@@ -77,7 +77,7 @@ class UsersRepositoryTest {
                     userEntity(id = 2, name = "Cached Ervin")
                 )
             )
-            val repository: UsersRepository = UsersRepositoryImpl(
+            val repository: UsersRepository = createRepository(
                 api = api,
                 dao = dao
             )
@@ -96,7 +96,7 @@ class UsersRepositoryTest {
             error = UnknownHostException("No internet")
         )
         val dao = FakeUserDao()
-        val repository: UsersRepository = UsersRepositoryImpl(
+        val repository: UsersRepository = createRepository(
             api = api,
             dao = dao
         )
@@ -115,7 +115,7 @@ class UsersRepositoryTest {
             error = IllegalStateException("Broken response")
         )
         val dao = FakeUserDao()
-        val repository: UsersRepository = UsersRepositoryImpl(
+        val repository: UsersRepository = createRepository(
             api = api,
             dao = dao
         )
@@ -137,7 +137,7 @@ class UsersRepositoryTest {
                 userEntity(id = 2, name = "Ervin Howell")
             )
         )
-        val repository: UsersRepository = UsersRepositoryImpl(
+        val repository: UsersRepository = createRepository(
             api = api,
             dao = dao
         )
@@ -151,7 +151,7 @@ class UsersRepositoryTest {
     fun returns_not_found_when_user_does_not_exist_in_cache() = runBlocking {
         val api = FakeUserApi()
         val dao = FakeUserDao()
-        val repository: UsersRepository = UsersRepositoryImpl(
+        val repository: UsersRepository = createRepository(
             api = api,
             dao = dao
         )
@@ -177,7 +177,7 @@ class UsersRepositoryTest {
                 userEntity(id = 2, name = "Cached Ervin")
             )
         )
-        val repository: UsersRepository = UsersRepositoryImpl(
+        val repository: UsersRepository = createRepository(
             api = api,
             dao = dao
         )
@@ -197,7 +197,7 @@ class UsersRepositoryTest {
             error = UnknownHostException()
         )
         val dao = FakeUserDao()
-        val repository: UsersRepository = UsersRepositoryImpl(
+        val repository: UsersRepository = createRepository(
             api = api,
             dao = dao
         )
@@ -227,7 +227,7 @@ class UsersRepositoryTest {
         scenarios.forEach { (exception, expectedError) ->
             val api = FakeUserApi(error = exception)
             val dao = FakeUserDao()
-            val repository: UsersRepository = UsersRepositoryImpl(
+            val repository: UsersRepository = createRepository(
                 api = api,
                 dao = dao
             )
@@ -253,7 +253,7 @@ class UsersRepositoryTest {
                 userEntity(id = 1, name = "Cached Leanne")
             )
         )
-        val repository: UsersRepository = UsersRepositoryImpl(
+        val repository: UsersRepository = createRepository(
             api = api,
             dao = dao,
             networkConnectivityService = FakeNetworkConnectivityService(
@@ -292,7 +292,7 @@ class UsersRepositoryTest {
                     userEntity(id = 1, name = "Cached Leanne")
                 )
             )
-            val repository: UsersRepository = UsersRepositoryImpl(
+            val repository: UsersRepository = createRepository(
                 api = api,
                 dao = dao
             )
@@ -317,7 +317,7 @@ class UsersRepositoryTest {
                 userEntity(id = 1, name = "Cached Leanne")
             )
         )
-        val repository: UsersRepository = UsersRepositoryImpl(
+        val repository: UsersRepository = createRepository(
             api = api,
             dao = dao
         )
@@ -325,6 +325,19 @@ class UsersRepositoryTest {
         val result = repository.getUsers(forceUpdate = false) as UsersResult.Cached
 
         assertEquals("Cached Leanne", result.users.first().name)
+    }
+
+    private fun createRepository(
+        api: UserApi,
+        dao: UserDao,
+        networkConnectivityService: NetworkConnectivityService =
+            FakeNetworkConnectivityService(status = NetworkStatus.Connected)
+    ): UsersRepository {
+        return UsersRepositoryImpl(
+            api = api,
+            dao = dao,
+            networkConnectivityService = networkConnectivityService
+        )
     }
 
     private class FakeNetworkConnectivityService(
@@ -355,7 +368,7 @@ class UsersRepositoryTest {
 
     private class FakeUserDao(
         cachedUsers: List<UserEntity> = emptyList()
-    ) : UserDao {
+    ) : UserDao() {
 
         val users = cachedUsers.toMutableList()
 
@@ -364,8 +377,14 @@ class UsersRepositoryTest {
         }
 
         override suspend fun insertUsers(users: List<UserEntity>) {
-            this.users.clear()
+            this.users.removeAll { existing ->
+                users.any { user -> user.id == existing.id }
+            }
             this.users.addAll(users)
+        }
+
+        override suspend fun deleteUsers() {
+            users.clear()
         }
 
         override suspend fun getUserById(id: Int): UserEntity? {

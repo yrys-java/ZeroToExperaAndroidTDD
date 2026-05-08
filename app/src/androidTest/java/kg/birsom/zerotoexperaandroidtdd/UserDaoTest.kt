@@ -3,7 +3,7 @@ package kg.birsom.zerotoexperaandroidtdd
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import kg.birsom.zerotoexperaandroidtdd.feature.users.data.local.UserDatabase
+import kg.birsom.zerotoexperaandroidtdd.core.database.AppDatabase
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.local.dao.UserDao
 import kg.birsom.zerotoexperaandroidtdd.feature.users.data.local.entity.UserEntity
 import kotlinx.coroutines.runBlocking
@@ -14,7 +14,7 @@ import org.junit.Test
 
 class UserDaoTest {
 
-    private lateinit var database: UserDatabase
+    private lateinit var database: AppDatabase
     private lateinit var dao: UserDao
 
     @Before
@@ -22,7 +22,7 @@ class UserDaoTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         database = Room.inMemoryDatabaseBuilder(
             context,
-            UserDatabase::class.java
+            AppDatabase::class.java
         )
             .allowMainThreadQueries()
             .build()
@@ -77,6 +77,23 @@ class UserDaoTest {
     @Test
     fun returns_null_when_user_does_not_exist() = runBlocking {
         assertEquals(null, dao.getUserById(id = 404))
+    }
+
+    @Test
+    fun replaces_all_users() = runBlocking {
+        dao.insertUsers(
+            listOf(
+                userEntity(id = 1, name = "Old Leanne"),
+                userEntity(id = 2, name = "Old Ervin")
+            )
+        )
+
+        val freshUsers = listOf(
+            userEntity(id = 1, name = "Fresh Leanne")
+        )
+        dao.replaceUsers(freshUsers)
+
+        assertEquals(freshUsers, dao.getUsers())
     }
 
     private fun userEntity(
